@@ -19,6 +19,10 @@ src/game.cpp
 src/window.cpp
 src/particle.cpp
 src/random.cpp
+src/ui_background.cpp
+src/ui_manager.cpp
+src/ui_button.cpp
+src/utils.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)

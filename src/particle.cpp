@@ -2,7 +2,7 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include "random.hpp"
 
-Particle::Particle(Random* random, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds) : particle(*texture), lifetime(lifetime), velocity(velocity), fades(fades), minBounds(minBounds), maxBounds(maxBounds)
+Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds) : particle(*texture), lifetime(lifetime), velocity(velocity), fades(fades), minBounds(minBounds), maxBounds(maxBounds)
 {
     particleSize = rect.size;
 
@@ -14,13 +14,16 @@ Particle::Particle(Random* random, sf::FloatRect rect, sf::IntRect texCoords, sf
 
     particleAlpha = 255;
     particleBrightness = random->getRandInt(230, 255);
+    startTime = time;
     finished = false;
 }
 
-bool Particle::update(float dt)
+bool Particle::update(float dt, float time)
 {
     if (!finished)
     {
+        float elapsedTime = time - startTime;
+
         particle.move(velocity * dt);
 
         if (particle.getPosition().x - particleSize.x / 2.f < minBounds.x) particle.setPosition({minBounds.x + particleSize.x / 2.f, particle.getPosition().y});
@@ -31,11 +34,11 @@ bool Particle::update(float dt)
         
         if (fades)
         {
-            particleAlpha = std::min((255 - 255 * (lifetimeClock.getElapsedTime().asSeconds() / lifetime)), 255.f);
+            particleAlpha = std::min((255 - 255 * (elapsedTime / lifetime)), 255.f);
             particle.setColor(sf::Color(particleBrightness, particleBrightness, particleBrightness, particleAlpha));
         }
 
-        if (lifetimeClock.getElapsedTime().asSeconds() >= lifetime)
+        if (elapsedTime >= lifetime)
         {
             particle.setColor(sf::Color::Red);
 

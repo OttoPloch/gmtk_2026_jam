@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include "particle.hpp"
 
 class Random;
@@ -14,13 +15,13 @@ public:
 
     void launch();
 
-    void update(float dt);
+    void update(float dt, float time);
 
     void draw(sf::RenderWindow& window);
 
     sf::Vector2u getBackgroundSize();
 
-    void addParticle();
+    void addParticle(float time);
 
     Random* random;
 private:

@@ -9,9 +9,9 @@ class Particle
 public:
     Particle();
     
-    Particle(Random* random, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds);
+    Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds);
 
-    bool update(float dt);
+    bool update(float dt, float time);
 
     void draw(sf::RenderWindow& window);
 private:
@@ -27,6 +27,6 @@ private:
     sf::Vector2f minBounds;
     sf::Vector2f maxBounds;
     
-    sf::Clock lifetimeClock;
+    float startTime;
     bool finished;
 };

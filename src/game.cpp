@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
 
@@ -24,7 +25,7 @@ void Game::run()
 	while (window.window.isOpen())
 	{
         dt = dtClock.restart().asSeconds();
-
+        
         if (secondCounter >= 1)
         {
             std::cout << "FPS: " << 1.f / dt << '\n';
@@ -35,10 +36,13 @@ void Game::run()
         {
             secondCounter += dt;
         }
-
+        
         events();
 
-        update();
+        if (gameClock.isRunning())
+        {
+            update();
+        }
 
         draw();
 	}
@@ -52,6 +56,17 @@ void Game::events()
         {
             quit();
         }
+        if (event->is<sf::Event::FocusLost>())
+        {
+            gameClock.stop();
+        }
+        if (event->is<sf::Event::FocusGained>())
+        {
+            gameClock.start();
+        }
+
+        if (!gameClock.isRunning()) continue;
+
         if (auto keyPressed = event->getIf<sf::Event::KeyPressed>())
         {
             if (keyPressed->code == sf::Keyboard::Key::Escape)
@@ -72,7 +87,22 @@ void Game::events()
             }
             else if (keyPressed->code == sf::Keyboard::Key::P)
             {
-                launchPad.addParticle();
+                launchPad.addParticle(gameClock.getElapsedTime().asSeconds());
+            }
+            else if (keyPressed->code == sf::Keyboard::Key::U)
+            {
+                uiManager.clearUI();
+
+                uiManager.addUIBackground({
+                    {10, 10},
+                    window.window.mapPixelToCoords(sf::Mouse::getPosition(window.window))
+                });
+
+                uiManager.addUIButton(&window.window, {{10, 10}, {36, 36}});
+            }
+            else if (keyPressed->code == sf::Keyboard::Key::X)
+            {
+                uiManager.clearUI();
             }
         }
     }
@@ -80,7 +110,9 @@ void Game::events()
 
 void Game::update()
 {
-    launchPad.update(dt);
+    launchPad.update(dt, gameClock.getElapsedTime().asSeconds());
+
+    uiManager.update(dt);
 }
 
 void Game::draw()
@@ -89,6 +121,8 @@ void Game::draw()
     
     launchPad.draw(window.window);
     
+    uiManager.draw(window.window);
+
     window.window.display();
 }
 

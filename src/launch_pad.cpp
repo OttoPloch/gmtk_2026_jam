@@ -1,4 +1,5 @@
 #include "launch_pad.hpp"
+#include <SFML/Graphics/Rect.hpp>
 #include <iostream>
 #include "random.hpp"
 
@@ -36,11 +37,11 @@ void LaunchPad::launch()
     launching = true;
 }
 
-void LaunchPad::update(float dt)
+void LaunchPad::update(float dt, float time)
 {
     if (launching)
     {
-        addParticle();
+        addParticle(time);
 
         rocketSpeed *= std::pow(rocketSpeedMultiplier, dt);
 
@@ -54,12 +55,12 @@ void LaunchPad::update(float dt)
 
     for (int i = 0; i < particles_behind.size(); i++)
     {
-        if (particles_behind[i].update(dt)) particles_behind.erase(particles_behind.begin() + i);
+        if (particles_behind[i].update(dt, time)) particles_behind.erase(particles_behind.begin() + i);
     }
 
     for (int i = 0; i < particles_infront.size(); i++)
     {
-        if (particles_infront[i].update(dt)) particles_infront.erase(particles_infront.begin() + i);
+        if (particles_infront[i].update(dt, time)) particles_infront.erase(particles_infront.begin() + i);
     }
 }
 
@@ -77,7 +78,7 @@ sf::Vector2u LaunchPad::getBackgroundSize()
     return bgTexture.getSize();
 }
 
-void LaunchPad::addParticle()
+void LaunchPad::addParticle(float time)
 {
     sf::Vector2f position({rocket.getPosition().x, rocket.getPosition().y + 4});
     float size = random->getRandInt(4, 10);
@@ -90,10 +91,10 @@ void LaunchPad::addParticle()
 
     if (random->getRandInt(0, 1) == 1)
     {
-        particles_behind.emplace_back(random, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
+        particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
     }
     else
     {
-        particles_infront.emplace_back(random, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
+        particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
     }
 }
