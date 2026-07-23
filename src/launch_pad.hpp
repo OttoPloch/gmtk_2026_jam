@@ -1,6 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "particle.hpp"
+
+class Random;
 
 class LaunchPad
 {
@@ -11,11 +14,15 @@ public:
 
     void launch();
 
-    void update();
+    void update(float dt);
 
     void draw(sf::RenderWindow& window);
 
     sf::Vector2u getBackgroundSize();
+
+    void addParticle();
+
+    Random* random;
 private:
     sf::Texture bgTexture;
     sf::Sprite background;
@@ -32,4 +39,10 @@ private:
     
     bool launching;
     float rocketSpeed;
+
+
+
+    std::vector<Particle> particles_behind;
+    std::vector<Particle> particles_infront;
+    sf::Texture particleTexture;
 };

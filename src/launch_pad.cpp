@@ -1,5 +1,6 @@
 #include "launch_pad.hpp"
 #include <iostream>
+#include "random.hpp"
 
 LaunchPad::LaunchPad() :
 bgTexture("../../assets/launch site.png"),
@@ -9,12 +10,17 @@ launchPad(launchPadTexture),
 rocketTexture("../../assets/rocket.png"),
 rocket(rocketTexture),
 rocketStartPosition(242, 216),
-rocketStartSpeed(.01f),
-rocketSpeedMultiplier(1.01f),
+rocketStartSpeed(.6f),
+rocketSpeedMultiplier(1.6f),
 launching(false),
 rocketSpeed(rocketStartSpeed)
 {
     rocket.setOrigin({rocket.getLocalBounds().size.x / 2.f, static_cast<float>(rocket.getLocalBounds().size.y)});
+
+    if (!particleTexture.loadFromFile("../../assets/particles.png"))
+    {
+        std::cout << "ERROR loading particle texture.\n";
+    }
 }
 
 void LaunchPad::reset()
@@ -30,31 +36,64 @@ void LaunchPad::launch()
     launching = true;
 }
 
-void LaunchPad::update()
+void LaunchPad::update(float dt)
 {
     if (launching)
     {
-        rocketSpeed *= rocketSpeedMultiplier;
+        addParticle();
 
-        rocket.move({0, -rocketSpeed});
+        rocketSpeed *= std::pow(rocketSpeedMultiplier, dt);
 
-        if (rocket.getPosition().y < 0)
+        rocket.move({0, -rocketSpeed * dt});
+
+        if (rocket.getPosition().y < -static_cast<int>(getBackgroundSize().y))
         {
-            launching = false;
+            reset();
         }
     }
 
-    std::cout << launching << '\n';
+    for (int i = 0; i < particles_behind.size(); i++)
+    {
+        if (particles_behind[i].update(dt)) particles_behind.erase(particles_behind.begin() + i);
+    }
+
+    for (int i = 0; i < particles_infront.size(); i++)
+    {
+        if (particles_infront[i].update(dt)) particles_infront.erase(particles_infront.begin() + i);
+    }
 }
 
 void LaunchPad::draw(sf::RenderWindow& window)
 {
     window.draw(background);
+    for (auto& p : particles_behind) p.draw(window);
     window.draw(rocket);
     window.draw(launchPad);
+    for (auto& p : particles_infront) p.draw(window);
 }
 
 sf::Vector2u LaunchPad::getBackgroundSize()
 {
     return bgTexture.getSize();
+}
+
+void LaunchPad::addParticle()
+{
+    sf::Vector2f position({rocket.getPosition().x, rocket.getPosition().y + 4});
+    float size = random->getRandInt(4, 10);
+    sf::IntRect texCoords({0, 0}, {16, 16});
+    float lifetime = random->getRandInt(1, 2);
+    sf::Vector2f velocity(random->getRandInt(-20, 20), random->getRandInt(10, 30));
+    bool fades = true;
+    sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
+    sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 12 + random->getRandInt(-1, 1));
+
+    if (random->getRandInt(0, 1) == 1)
+    {
+        particles_behind.emplace_back(random, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
+    }
+    else
+    {
+        particles_infront.emplace_back(random, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
+    }
 }

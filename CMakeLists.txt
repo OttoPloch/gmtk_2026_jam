@@ -17,6 +17,8 @@ src/main.cpp
 src/launch_pad.cpp
 src/game.cpp
 src/window.cpp
+src/particle.cpp
+src/random.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)
