@@ -9,7 +9,7 @@ class Particle
 public:
     Particle();
     
-    Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds);
+    Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, sf::Color color, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds);
 
     bool update(float dt, float time);
 
@@ -19,7 +19,7 @@ private:
 
     sf::Sprite particle;
     float particleAlpha;
-    int particleBrightness;
+    sf::Color color;
     
     float lifetime;
     sf::Vector2f velocity;

@@ -81,20 +81,43 @@ sf::Vector2u LaunchPad::getBackgroundSize()
 void LaunchPad::addParticle(float time)
 {
     sf::Vector2f position({rocket.getPosition().x, rocket.getPosition().y + 4});
-    float size = random->getRandInt(4, 10);
     sf::IntRect texCoords({0, 0}, {16, 16});
-    float lifetime = random->getRandInt(1, 2);
-    sf::Vector2f velocity(random->getRandInt(-20, 20), random->getRandInt(10, 30));
+    float size;
+    
+    sf::Color particleColor;
+    float lifetime;
+    sf::Vector2f velocity;
+
+    if (random->getRandInt(0, 1) == 1)
+    {
+        // vapor
+        size = random->getRandInt(4, 10);
+        int brightness = random->getRandInt(230, 255);
+        particleColor = sf::Color(brightness, brightness, brightness);
+        lifetime = random->getRandInt(1, 2);
+        velocity = sf::Vector2f(random->getRandInt(-20, 20), random->getRandInt(10, 30));
+    }
+    else
+    {
+        // fire
+        size = random->getRandInt(1, 6);
+        particleColor = sf::Color(random->getRandInt(240, 255), 100, 100);
+        lifetime = random->getRandInt(1, 2) / 2.f;
+        velocity = sf::Vector2f(random->getRandInt(-5, 5), random->getRandInt(5, 15));
+    }
+    
+    
     bool fades = true;
     sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
     sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 10 + random->getRandInt(-3, 3));
 
+
     if (random->getRandInt(0, 1) == 1)
     {
-        particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
+        particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, minBounds, maxBounds);
     }
     else
     {
-        particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, lifetime, velocity, fades, minBounds, maxBounds);
+        particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, minBounds, maxBounds);
     }
 }

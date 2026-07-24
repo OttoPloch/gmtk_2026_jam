@@ -2,7 +2,7 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include "random.hpp"
 
-Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds) : particle(*texture), lifetime(lifetime), velocity(velocity), fades(fades), minBounds(minBounds), maxBounds(maxBounds)
+Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, sf::Color color, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds) : particle(*texture), color(color), lifetime(lifetime), velocity(velocity), fades(fades), minBounds(minBounds), maxBounds(maxBounds)
 {
     particleSize = rect.size;
 
@@ -13,7 +13,6 @@ Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect t
     particle.setScale({rect.size.x / particle.getGlobalBounds().size.x, rect.size.y / particle.getGlobalBounds().size.y});
 
     particleAlpha = 255;
-    particleBrightness = random->getRandInt(230, 255);
     startTime = time;
     finished = false;
 }
@@ -35,7 +34,7 @@ bool Particle::update(float dt, float time)
         if (fades)
         {
             particleAlpha = std::min((255 - 255 * (elapsedTime / lifetime)), 255.f);
-            particle.setColor(sf::Color(particleBrightness, particleBrightness, particleBrightness, particleAlpha));
+            particle.setColor(sf::Color(color.r, color.g, color.b, particleAlpha));
         }
 
         if (elapsedTime >= lifetime)
