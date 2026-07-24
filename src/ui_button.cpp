@@ -2,12 +2,13 @@
 #include "utils.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
-#include <iostream>
 
 UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : window(window), button(*texture), rect(rect), texCoords(texCoords), timeToRelease(timeToRelease)
 {
     timeSincePressed = timeToRelease;
 
+    button.setOrigin({0, 12});
+    
     setRect(rect, texCoords[0]);
 }
 
@@ -15,8 +16,6 @@ void UIButton::update(float dt)
 {
     if (mouseCollide(rect, *window) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSincePressed >= timeToRelease)
     {
-        std::cout << timeSincePressed << '\n';
-
         timeSincePressed = 0;
 
         setTexCoords(texCoords[2]);

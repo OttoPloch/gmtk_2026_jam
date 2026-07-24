@@ -5,7 +5,7 @@
 class UIBackground
 {
 public:
-    UIBackground(sf::Texture* texture, sf::FloatRect rect, int texCoordSize = 16, float scale = 1.f);
+    UIBackground(sf::Texture* texture, sf::FloatRect rect, int texCoordSize = 32, float scale = 1.f);
 
     void draw(sf::RenderWindow& window);
 private:

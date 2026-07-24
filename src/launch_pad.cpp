@@ -87,7 +87,7 @@ void LaunchPad::addParticle(float time)
     sf::Vector2f velocity(random->getRandInt(-20, 20), random->getRandInt(10, 30));
     bool fades = true;
     sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
-    sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 12 + random->getRandInt(-1, 1));
+    sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 10 + random->getRandInt(-3, 3));
 
     if (random->getRandInt(0, 1) == 1)
     {
