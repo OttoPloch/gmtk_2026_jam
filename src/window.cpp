@@ -2,9 +2,9 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/VideoMode.hpp>
 
-Window::Window() : windowState(sf::State::Windowed), windowedResolution(960, 540), backgroundSize(1000, 1000) {}
+Window::Window() : windowState(sf::State::Windowed), windowedResolution(1440, 810), backgroundSize(100, 100) {}
 
-Window::Window(sf::Vector2f backgroundSize) : windowState(sf::State::Windowed), windowedResolution(960, 540), backgroundSize(backgroundSize) {}
+Window::Window(sf::Vector2f backgroundSize) : windowState(sf::State::Windowed), windowedResolution(1440, 810), backgroundSize(backgroundSize) {}
 
 void Window::create(sf::VideoMode videoMode, std::uint32_t style)
 {
@@ -35,4 +35,9 @@ void Window::toggleFullscreen()
 
         create(sf::VideoMode::getDesktopMode(), sf::Style::Close);
     }
+}
+
+void Window::setViewRect(sf::FloatRect viewRect)
+{
+    window.setView(sf::View(viewRect.position, viewRect.size));
 }

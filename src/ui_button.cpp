@@ -3,22 +3,26 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : window(window), button(*texture), rect(rect), texCoords(texCoords), timeToRelease(timeToRelease)
+UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : window(window), button(*texture), rect(rect), texCoords(texCoords), timeToRelease(timeToRelease)
 {
     timeSincePressed = timeToRelease;
 
-    button.setOrigin({0, 12});
-    
+    if (sizeIsScale) rect.size = {texCoords[0].size.x * rect.size.x, texCoords[0].size.y * rect.size.y};
+
     setRect(rect, texCoords[0]);
+    
+    button.setOrigin({0, button.getTextureRect().size.y / 3.f});
 }
 
 void UIButton::update(float dt)
 {
-    if (mouseCollide(rect, *window) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSincePressed >= timeToRelease)
+    if (mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSincePressed >= timeToRelease)
     {
         timeSincePressed = 0;
 
         setTexCoords(texCoords[2]);
+
+        down = true;
     }
     else
     {
@@ -28,10 +32,12 @@ void UIButton::update(float dt)
         {
             setTexCoords(texCoords[0]);
         }
-        else if (timeSincePressed > .2f && !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        else if (timeSincePressed > .2f && (!mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) || !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)))
         {
             setTexCoords(texCoords[1]);
         }
+
+        down = false;
     }
 }
 
@@ -40,9 +46,15 @@ void UIButton::draw(sf::RenderWindow& window)
     window.draw(button);
 }
 
+bool UIButton::isDown()
+{
+    return down;
+}
+
 void UIButton::setRect(sf::FloatRect newRect, sf::IntRect newTexCoords)
 {
     rect = newRect;
+
     button.setTextureRect(newTexCoords);
 
     button.setPosition(rect.position);

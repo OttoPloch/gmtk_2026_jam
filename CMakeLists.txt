@@ -23,6 +23,9 @@ src/ui_background.cpp
 src/ui_manager.cpp
 src/ui_button.cpp
 src/utils.cpp
+src/ui_dial.cpp
+src/ui_slider.cpp
+src/level.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)

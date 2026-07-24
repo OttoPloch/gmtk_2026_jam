@@ -16,6 +16,8 @@ public:
 
     void toggleFullscreen();
 
+    void setViewRect(sf::FloatRect viewRect);
+
     sf::RenderWindow window;
 
     sf::Vector2u windowedResolution;

@@ -4,15 +4,24 @@
 #include <SFML/Graphics/Rect.hpp>
 #include "ui_background.hpp"
 #include "ui_button.hpp"
+#include "ui_dial.hpp"
+#include "ui_slider.hpp"
+#include <map>
 
 class UIManager
 {
 public:
     UIManager();
 
-    void addUIBackground(sf::FloatRect rect, sf::Texture* texture = nullptr);
+    UIBackground* addUIBackground(std::string ID, sf::FloatRect rect, int texCoordSize, sf::Vector2i texCoordOffset, sf::Texture* texture = nullptr);
+    UIButton* addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture = nullptr, float timeToRelease = 1.f);
+    UIDial* addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, sf::Texture* texture = nullptr);
+    UISlider* addUISlider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate, sf::Texture* texture = nullptr);
 
-    void addUIButton(sf::RenderWindow* window, sf::FloatRect rect, sf::Texture* texture = nullptr, std::array<sf::IntRect, 3> texCoords = {sf::IntRect({0, 0}, {36, 36}), sf::IntRect({36, 0}, {36, 36}), sf::IntRect({72, 0}, {36, 36})}, float timeToRelease = 1.f);
+    UIBackground* getUIBackground(std::string ID);
+    UIButton* getUIButton(std::string ID);
+    UIDial* getUIDial(std::string ID);
+    UISlider* getUISlider(std::string ID);
 
     void clearUI();
 
@@ -20,9 +29,15 @@ public:
 
     void draw(sf::RenderWindow& window);
 private:
-    std::vector<UIBackground> backgrounds;
+    std::map<std::string, std::unique_ptr<UIBackground>> backgrounds;
     sf::Texture uiBackgroundTexture;
 
-    std::vector<UIButton> buttons;
+    std::map<std::string, std::unique_ptr<UIButton>> buttons;
     sf::Texture uiButtonTexture;
+
+    std::map<std::string, std::unique_ptr<UIDial>> dials;
+    sf::Texture uiDialTexture;
+
+    std::map<std::string, std::unique_ptr<UISlider>> sliders;
+    sf::Texture uiSliderTexture;
 };

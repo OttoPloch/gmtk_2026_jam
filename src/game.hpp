@@ -5,6 +5,7 @@
 #include "window.hpp"
 #include "random.hpp"
 #include "ui_manager.hpp"
+#include "level.hpp"
 
 class Game
 {
@@ -27,6 +28,7 @@ private:
     LaunchPad launchPad;
     Random random;
     UIManager uiManager;
+    Level level;
 
     sf::Clock dtClock;
     float dt;

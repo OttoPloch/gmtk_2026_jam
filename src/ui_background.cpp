@@ -1,18 +1,18 @@
 #include "ui_background.hpp"
 
-UIBackground::UIBackground(sf::Texture* texture, sf::FloatRect rect, int texCoordSize, float scale)
+UIBackground::UIBackground(sf::Texture* texture, sf::FloatRect rect, int texCoordSize, sf::Vector2i texCoordOffset, float scale)
 {
     for (int i = 0; i < 9; i++) sprites[i] = std::make_unique<sf::Sprite>(*texture);
 
-    sprites[0]->setTextureRect({{0, 0}, {texCoordSize, texCoordSize}});
-    sprites[1]->setTextureRect({{texCoordSize, 0}, {texCoordSize, texCoordSize}});
-    sprites[2]->setTextureRect({{texCoordSize * 2, 0}, {texCoordSize, texCoordSize}});
-    sprites[3]->setTextureRect({{0, texCoordSize}, {texCoordSize, texCoordSize}});
-    sprites[4]->setTextureRect({{texCoordSize, texCoordSize}, {texCoordSize, texCoordSize}});
-    sprites[5]->setTextureRect({{texCoordSize * 2, texCoordSize}, {texCoordSize, texCoordSize}});
-    sprites[6]->setTextureRect({{0, texCoordSize * 2}, {texCoordSize, texCoordSize}});
-    sprites[7]->setTextureRect({{texCoordSize, texCoordSize * 2}, {texCoordSize, texCoordSize}});
-    sprites[8]->setTextureRect({{texCoordSize * 2, texCoordSize * 2}, {texCoordSize, texCoordSize}});
+    sprites[0]->setTextureRect({texCoordOffset, {texCoordSize, texCoordSize}});
+    sprites[1]->setTextureRect({{texCoordOffset.x + texCoordSize, texCoordOffset.y}, {texCoordSize, texCoordSize}});
+    sprites[2]->setTextureRect({{texCoordOffset.x + texCoordSize * 2, texCoordOffset.y}, {texCoordSize, texCoordSize}});
+    sprites[3]->setTextureRect({{texCoordOffset.x, texCoordOffset.y + texCoordSize}, {texCoordSize, texCoordSize}});
+    sprites[4]->setTextureRect({{texCoordOffset.x + texCoordSize, texCoordOffset.y + texCoordSize}, {texCoordSize, texCoordSize}});
+    sprites[5]->setTextureRect({{texCoordOffset.x + texCoordSize * 2, texCoordOffset.y + texCoordSize}, {texCoordSize, texCoordSize}});
+    sprites[6]->setTextureRect({{texCoordOffset.x, texCoordOffset.y + texCoordSize * 2}, {texCoordSize, texCoordSize}});
+    sprites[7]->setTextureRect({{texCoordOffset.x + texCoordSize, texCoordOffset.y + texCoordSize * 2}, {texCoordSize, texCoordSize}});
+    sprites[8]->setTextureRect({{texCoordOffset.x + texCoordSize * 2, texCoordOffset.y + texCoordSize * 2}, {texCoordSize, texCoordSize}});
 
     float cornerSize = texCoordSize * scale;
     float middleLength = rect.size.x - cornerSize * 2;

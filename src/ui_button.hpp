@@ -7,11 +7,13 @@
 class UIButton
 {
 public:
-    UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, std::array<sf::IntRect, 3> texCoords = {sf::IntRect({0, 0}, {36, 36}), sf::IntRect({36, 0}, {36, 36}), sf::IntRect({72, 0}, {36, 36})}, float timeToRelease = 1.f);
+    UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease = 1.f);
 
     void update(float dt);
 
     void draw(sf::RenderWindow& window);
+
+    bool isDown();
 private:
     void setRect(sf::FloatRect newRect, sf::IntRect newTexCoords);
     void setRect(sf::FloatRect newRect);
@@ -26,4 +28,6 @@ private:
 
     float timeToRelease;
     float timeSincePressed;
+
+    bool down;
 };
