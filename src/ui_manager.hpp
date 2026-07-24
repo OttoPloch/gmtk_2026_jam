@@ -7,6 +7,7 @@
 #include "ui_dial.hpp"
 #include "ui_slider.hpp"
 #include <map>
+#include "ui_text.hpp"
 
 class UIManager
 {
@@ -15,13 +16,15 @@ public:
 
     UIBackground* addUIBackground(std::string ID, sf::FloatRect rect, int texCoordSize, sf::Vector2i texCoordOffset, sf::Texture* texture = nullptr);
     UIButton* addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture = nullptr, float timeToRelease = 1.f);
-    UIDial* addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, sf::Texture* texture = nullptr);
+    UIDial* addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1, sf::Texture* texture = nullptr);
     UISlider* addUISlider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate, sf::Texture* texture = nullptr);
+    UIText* addUIText(std::string ID, sf::FloatRect rect, std::string content, bool autoSetHeight = true, sf::Color color = sf::Color(60, 255, 60), sf::Font* font = nullptr);
 
     UIBackground* getUIBackground(std::string ID);
     UIButton* getUIButton(std::string ID);
     UIDial* getUIDial(std::string ID);
     UISlider* getUISlider(std::string ID);
+    UIText* getUIText(std::string ID);
 
     void clearUI();
 
@@ -40,4 +43,7 @@ private:
 
     std::map<std::string, std::unique_ptr<UISlider>> sliders;
     sf::Texture uiSliderTexture;
+
+    std::map<std::string, std::unique_ptr<UIText>> text;
+    sf::Font uiTextFont;
 };

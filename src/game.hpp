@@ -28,7 +28,8 @@ private:
     LaunchPad launchPad;
     Random random;
     UIManager uiManager;
-    Level level;
+    std::vector<std::unique_ptr<Level>> levels;
+    int currLevel;
 
     sf::Clock dtClock;
     float dt;

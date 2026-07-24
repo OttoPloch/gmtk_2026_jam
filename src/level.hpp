@@ -1,5 +1,7 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+
 class LaunchPad;
 class UIManager;
 
@@ -8,10 +10,13 @@ class Level
 public:
     Level();
 
-    Level(LaunchPad* launchPad, UIManager* uiManager);
+    Level(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager);
 
-    void update();
-private:
+    virtual void setup();
+
+    virtual void update();
+protected:
+    sf::RenderWindow* window;
     LaunchPad* launchPad;
     UIManager* uiManager;
 };

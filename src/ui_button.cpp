@@ -3,6 +3,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 
+#include <iostream>
+
 UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : window(window), button(*texture), rect(rect), texCoords(texCoords), timeToRelease(timeToRelease)
 {
     timeSincePressed = timeToRelease;
@@ -12,32 +14,47 @@ UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect
     setRect(rect, texCoords[0]);
     
     button.setOrigin({0, button.getTextureRect().size.y / 3.f});
+
+    down = false;
+    canClick = false;
 }
 
 void UIButton::update(float dt)
 {
-    if (mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSincePressed >= timeToRelease)
+    down = false;
+
+    if (mouseCollide({rect.position - button.getOrigin(), rect.size}, *window))
     {
-        timeSincePressed = 0;
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            if (timeSincePressed >= timeToRelease && canClick)
+            {
+                timeSincePressed = 0;
+                setTexCoords(texCoords[2]);
+                down = true;
+            }
 
-        setTexCoords(texCoords[2]);
-
-        down = true;
+            canClick = false;
+        }
+        else
+        {
+            canClick = true;
+        }
     }
     else
     {
-        timeSincePressed += dt;
+        canClick = false;
+    }
 
-        if (timeSincePressed >= timeToRelease - .1f)
-        {
-            setTexCoords(texCoords[0]);
-        }
-        else if (timeSincePressed > .2f && (!mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) || !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)))
-        {
-            setTexCoords(texCoords[1]);
-        }
+    timeSincePressed += dt;
 
-        down = false;
+    if (timeSincePressed >= timeToRelease - .1f)
+    {
+        setTexCoords(texCoords[0]);
+    }
+    else if (timeSincePressed > .2f && (!mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) || !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)))
+    {
+        setTexCoords(texCoords[1]);
     }
 }
 

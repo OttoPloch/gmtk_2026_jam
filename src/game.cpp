@@ -4,7 +4,7 @@
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <iostream>
-#include "defaults.hpp"
+#include "levels.hpp"
 
 Game::Game() {}
 
@@ -16,13 +16,11 @@ void Game::start()
     launchPad.reset();
     launchPad.random = &random;
 
-    uiManager.addUIBackground("bg", {{10, 10}, {120, 40}}, defaultTexCoords.bgSmallTexCoordSize, defaultTexCoords.bgSmallTexCoordOffset);
-    uiManager.addUIButton("launch", &window.window, {{20, 18}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
-    uiManager.addUIDial("dial", &window.window, {{65, 20}, {1, 1}}, true, defaultTexCoords.dialSmallTexCoords);
-    uiManager.addUISlider("slider", &window.window, {{90, 18}, {1, 1}}, true, defaultTexCoords.smallHorizontalSlider);
-    uiManager.addUISlider("slider2", &window.window, {{90, 32}, {1, 1}}, true, defaultTexCoords.smallHorizontalSlider);
+    levels.emplace_back(std::make_unique<Level>(&window.window, &launchPad, &uiManager));
+    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager));
+    currLevel = 1;
 
-    level = Level(&launchPad, &uiManager);
+    levels[currLevel]->setup();
 
     run();
 }
@@ -112,12 +110,7 @@ void Game::events()
             }
             else if (keyPressed->code == sf::Keyboard::Key::U)
             {
-                uiManager.clearUI();
-
-                uiManager.addUIBackground("bg", {{10, 10}, window.window.mapPixelToCoords(sf::Mouse::getPosition(window.window))}, defaultTexCoords.bgSmallTexCoordSize, defaultTexCoords.bgSmallTexCoordOffset);
-                uiManager.addUIButton("launch", &window.window, {{20, 20}, {1, 1}}, true, defaultTexCoords.buttonSmallTexCoords);
-                uiManager.addUIDial("dial", &window.window, {{45, 20}, {1, 1}}, true, defaultTexCoords.dialSmallTexCoords);
-                uiManager.addUISlider("slider", &window.window, {{70, 20}, {1, 1}}, true, defaultTexCoords.smallHorizontalSlider);
+                levels[currLevel]->setup();
             }
             else if (keyPressed->code == sf::Keyboard::Key::X)
             {
@@ -133,7 +126,7 @@ void Game::update()
 
     uiManager.update(dt);
 
-    level.update();
+    levels[currLevel]->update();
 }
 
 void Game::draw()

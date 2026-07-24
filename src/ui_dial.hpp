@@ -7,7 +7,7 @@
 class UIDial
 {
 public:
-    UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords);
+    UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1);
 
     void update();
 
@@ -31,8 +31,13 @@ private:
 
     std::vector<sf::IntRect> texCoords;
 
-    int value;
+    float value;
     
+    int minValue;
+    int maxValue;
+    float valueScale;
+
     bool clicked;
     int prevAngle;
+    bool canClick;
 };

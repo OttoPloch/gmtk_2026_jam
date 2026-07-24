@@ -24,6 +24,15 @@ UIManager::UIManager()
     {
         std::cout << "ERROR loading ui slider texture.\n";
     }
+
+    std::string fontFile = "../../assets/raster-forge-font/RasterForgeRegular-JpBgm.ttf";
+    // std::string fontFile = "../../assets/pixelated-elegance-font/PixelatedEleganceRegular-ovawB.ttf";
+    // std::string fontFile = "../../assets/ithaca-font/Ithaca-LVB75.ttf";
+
+    if (!uiTextFont.openFromFile(fontFile))
+    {
+        std::cout << "ERROR loading ui text font.\n";
+    }
 }
 
 UIBackground* UIManager::addUIBackground(std::string ID, sf::FloatRect rect, int texCoordSize, sf::Vector2i texCoordOffset, sf::Texture* texture)
@@ -42,11 +51,11 @@ UIButton* UIManager::addUIButton(std::string ID, sf::RenderWindow* window, sf::F
     return (buttons[ID] = std::make_unique<UIButton>(window, texture, rect, sizeIsScale, texCoords, timeToRelease)).get();
 }
 
-UIDial* UIManager::addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, sf::Texture* texture)
+UIDial* UIManager::addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale, sf::Texture* texture)
 {
     if (!texture) texture = &uiDialTexture;
 
-    return (dials[ID] = std::make_unique<UIDial>(window, texture, rect, sizeIsScale, texCoords)).get();
+    return (dials[ID] = std::make_unique<UIDial>(window, texture, rect, sizeIsScale, texCoords, minValue, maxValue, valueScale)).get();
 }
 
 UISlider* UIManager::addUISlider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate, sf::Texture* texture)
@@ -54,6 +63,13 @@ UISlider* UIManager::addUISlider(std::string ID, sf::RenderWindow* window, sf::F
     if (!texture) texture = &uiSliderTexture;
 
     return (sliders[ID] = std::make_unique<UISlider>(window, texture, rect, sizeIsScale, sliderTemplate)).get();
+}
+
+UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string content, bool autoSetHeight, sf::Color color, sf::Font* font)
+{
+    if (!font) font = &uiTextFont;
+
+    return (text[ID] = std::make_unique<UIText>(rect, font, content, autoSetHeight, color)).get();
 }
 
 UIBackground* UIManager::getUIBackground(std::string ID)
@@ -84,6 +100,13 @@ UISlider* UIManager::getUISlider(std::string ID)
     return nullptr;
 }
 
+UIText* UIManager::getUIText(std::string ID)
+{
+    if (text.find(ID) != text.end()) return text[ID].get();
+    std::cout << "ERROR getting UIText with ID '" << ID << "'\n";
+    return nullptr;
+}
+
 
 void UIManager::clearUI()
 {
@@ -98,11 +121,13 @@ void UIManager::update(float dt)
     for (auto& b : buttons) b.second->update(dt);
     for (auto& d : dials) d.second->update();
     for (auto& s : sliders) s.second->update();
+    for (auto& t : text) t.second->update();
 }
 
 void UIManager::draw(sf::RenderWindow& window)
 {
     for (auto& u : backgrounds) u.second->draw(window);
+    for (auto& t : text) t.second->draw(window);
     for (auto& b : buttons) b.second->draw(window);
     for (auto& d : dials) d.second->draw(window);
     for (auto& s : sliders) s.second->draw(window);

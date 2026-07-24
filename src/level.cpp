@@ -4,14 +4,16 @@
 
 Level::Level() {}
 
-Level::Level(LaunchPad* launchPad, UIManager* uiManager) : launchPad(launchPad), uiManager(uiManager) {}
+Level::Level(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager) : window(window), launchPad(launchPad), uiManager(uiManager) {}
+
+void Level::setup()
+{
+    uiManager->clearUI();
+
+    uiManager->addUIText("INFO TEXT", {{0, 0}, {300, 1}}, "DEFAULT LEVEL CONFIG", true, sf::Color::White);
+}
 
 void Level::update()
 {
-    UIButton* launchButton = uiManager->getUIButton("launch");
-
-    if (launchButton && launchButton->isDown())
-    {
-        launchPad->launch();
-    }
+    
 }

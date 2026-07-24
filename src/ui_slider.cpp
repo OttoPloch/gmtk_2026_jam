@@ -67,11 +67,27 @@ void UISlider::update()
 
     if (!grabbed)
     {
-        if (mouseCollide(handle.getGlobalBounds(), *window) && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        if (mouseCollide(handle.getGlobalBounds(), *window))
         {
-            grabbed = true;
-    
-            grabOffset = mousePos - (handle.getGlobalBounds().position + sf::Vector2f(handle.getOrigin().x * scale.x, handle.getOrigin().y * scale.y));
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+            {
+                if (canGrab)
+                {
+                    grabbed = true;
+            
+                    grabOffset = mousePos - (handle.getGlobalBounds().position + sf::Vector2f(handle.getOrigin().x * scale.x, handle.getOrigin().y * scale.y));
+                }
+
+                canGrab = false;
+            }
+            else
+            {
+                canGrab = true;
+            }
+        }
+        else
+        {
+            canGrab = false;
         }
     }
     else

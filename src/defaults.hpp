@@ -17,8 +17,10 @@ struct DefaultTexCoords
 {
     int bgTexCoordSize = 32;
     int bgSmallTexCoordSize = 16;
+    int bgTextTexCoordSize = 5;
     sf::Vector2i bgTexCoordOffset = {0, 0};
     sf::Vector2i bgSmallTexCoordOffset = {0, 96};
+    sf::Vector2i bgTextTexCoordOffet = {48, 96};
 
     std::array<sf::IntRect, 3> buttonTexCoords = {
         sf::IntRect({0, 0}, {36, 36}),

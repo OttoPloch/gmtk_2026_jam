@@ -30,4 +30,5 @@ private:
     float timeSincePressed;
 
     bool down;
+    bool canClick;
 };

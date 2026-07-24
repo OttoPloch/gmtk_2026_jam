@@ -3,7 +3,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-UIDial::UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords) : window(window), dial(*texture), rect(rect), texCoords(texCoords)
+UIDial::UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : window(window), dial(*texture), rect(rect), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
 {
     if (sizeIsScale) rect.size = {texCoords[0].size.x * rect.size.x, texCoords[0].size.y * rect.size.y};
 
@@ -17,19 +17,29 @@ void UIDial::update()
 {
     sf::Vector2f center = {rect.position.x + rect.size.x / 2.f, rect.position.y + rect.size.y / 2.f};
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+    if (circleMouseCollide(center, center.x - rect.position.x, *window))
     {
-        if (!clicked && circleMouseCollide(center, center.x - rect.position.x, *window))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
-            clicked = true;
+            if (!clicked && canClick)
+            {
+                clicked = true;
+                prevAngle = getMouseAngle();
+            }
 
-            prevAngle = getMouseAngle();
+            canClick = false;
+        }
+        else
+        {
+            canClick = true;
         }
     }
     else
     {
-        clicked = false;
+        canClick = false;
     }
+
+    if (!sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) clicked = false;
 
     if (clicked)
     {
@@ -39,10 +49,14 @@ void UIDial::update()
 
         if (std::abs(diff) > 180) diff = 0;
 
-        value += diff;
+        value += diff * valueScale;
 
-        int step = std::ceil(360.f / texCoords.size());
-        int index = std::fmod(value, 360) / step;
+        if (value < minValue) value = minValue;
+        if (value > maxValue) value = maxValue;
+
+        float step = (360. * valueScale) / texCoords.size();
+        int index = std::fmod(value, 360. * valueScale) / step;
+
         if (index < 0) index = texCoords.size() + index;
         setTexCoords(texCoords[index]);
     }

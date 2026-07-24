@@ -40,6 +40,7 @@ private:
 
     bool grabbed;
     sf::Vector2f grabOffset;
+    bool canGrab;
 
     // percent
     float value;
