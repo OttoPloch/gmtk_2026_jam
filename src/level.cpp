@@ -5,7 +5,7 @@
 
 Level::Level() {}
 
-Level::Level(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager) : window(window), launchPad(launchPad), uiManager(uiManager) {}
+Level::Level(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : window(window), launchPad(launchPad), uiManager(uiManager), timeToComplete(timeToComplete) {}
 
 void Level::setup(std::string startAnimationKey, int animLayer)
 {
@@ -17,6 +17,8 @@ void Level::setup(std::string startAnimationKey, int animLayer)
     }
 
     launchPad->reset();
+
+    timeTaken = 0;
 
     createUI();
 }
@@ -30,10 +32,29 @@ void Level::createUI()
 
 void Level::update(float dt, float time)
 {
-    
+    timeTaken += dt;
+
+    if (timeTaken >= timeToComplete && timeToComplete > 0)
+    {
+        launchPad->fail();
+    }
+
+    specificUpdate(dt, time);
+}
+
+void Level::specificUpdate(float dt, float time)
+{
+
 }
 
 void Level::beginAnimation(std::string key, int layer)
 {
     animations[layer].emplace_back(key, 0);
+}
+
+float Level::timeRemainingPercent()
+{
+    if (timeToComplete <= 0) return 1;
+    
+    return (timeToComplete - timeTaken) / timeToComplete;
 }

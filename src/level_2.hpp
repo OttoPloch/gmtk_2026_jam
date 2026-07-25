@@ -7,16 +7,16 @@ class UIDial;
 class UIElement;
 class UICollider;
 
-class Level1 : public Level
+class Level2 : public Level
 {
 public:
-    Level1();
+    Level2();
 
-    Level1(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager);
+    Level2(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete);
 
     void createUI() override;
 
-    void update(float dt, float time) override;
+    void specificUpdate(float dt, float time) override;
 private:
     UIButton* launchButton;
 

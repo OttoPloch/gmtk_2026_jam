@@ -1,19 +1,18 @@
-#include "levels.hpp"
+#include "level_2.hpp"
 #include "defaults.hpp"
 #include "launch_pad.hpp"
 #include "ui_manager.hpp"
 #include "ui_button.hpp"
 #include "ui_dial.hpp"
 #include "ui_collider.hpp"
-#include <iostream>
 
-Level1::Level1() {}
+Level2::Level2() {}
 
-Level1::Level1(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager) : Level(window, launchPad, uiManager),
+Level2::Level2(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete),
 powerLevel(0)
 {}
 
-void Level1::createUI()
+void Level2::createUI()
 {
     uiManager->resetUI();
 
@@ -66,9 +65,11 @@ void Level1::createUI()
     text2->valueInDegrees = true;
 
     panel2 = uiManager->getGroup("panel2");
+
+    beginAnimation("hide all", 0);
 }
 
-void Level1::update(float dt, float time)
+void Level2::specificUpdate(float dt, float time)
 {
     std::vector<std::pair<std::string, float>*> animsToUpdate;
 
@@ -309,6 +310,7 @@ void Level1::update(float dt, float time)
 
         panel1Collider = nullptr;
         panel2Collider = nullptr;
+        uiManager->removeUICollider("panel1Collider");
+        uiManager->removeUICollider("panel2Collider");
     }
 }
-

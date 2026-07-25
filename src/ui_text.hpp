@@ -16,6 +16,7 @@ public:
     sf::FloatRect getRect();
 
     float* valueRead;
+    int* valueReadInt;
     bool valueInDegrees;
     int valueDecimals;
 private:

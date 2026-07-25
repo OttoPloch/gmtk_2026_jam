@@ -39,7 +39,7 @@ void UICollider::update()
 void UICollider::draw(sf::RenderWindow& window)
 {
     window.draw(indicator);
-    window.draw(debug);
+    // window.draw(debug);
 }
 
 void UICollider::updateVisuals()

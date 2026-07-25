@@ -22,7 +22,7 @@ rocketSpeed(rocketStartSpeed)
     {
         std::cout << "ERROR loading particle texture.\n";
     }
-
+    
     reset();
 }
 
@@ -39,6 +39,8 @@ void LaunchPad::reset()
     particles_behind.clear();
     particles_middle.clear();
     particles_infront.clear();
+
+    restart = false;
 }
 
 void LaunchPad::launch()
@@ -46,7 +48,7 @@ void LaunchPad::launch()
     launching = true;
 }
 
-void LaunchPad::update(float dt, float time)
+std::pair<bool, bool> LaunchPad::update(float dt, float time)
 {
     if (launching)
     {
@@ -63,9 +65,9 @@ void LaunchPad::update(float dt, float time)
 
         rocket.move({0, -rocketSpeed * dt});
 
-        if (rocket.getPosition().y < -static_cast<int>(getBackgroundSize().y))
+        if (rocket.getPosition().y < -static_cast<int>(getBackgroundSize().y) * 3)
         {
-            reset();
+            return {true, true};
         }
     }
 
@@ -83,6 +85,10 @@ void LaunchPad::update(float dt, float time)
     {
         if (particles_infront[i].update(dt, time)) particles_infront.erase(particles_infront.begin() + i);
     }
+
+    if (restart) return {true, false};
+
+    return {false, false};
 }
 
 void LaunchPad::draw(sf::RenderWindow& window)
@@ -136,5 +142,15 @@ void LaunchPad::addParticle(float time)
         velocity = sf::Vector2f(random->getRandInt(-5, 5), random->getRandInt(5, 10));
 
         particles_middle.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, minBounds, maxBounds);
+    }
+}
+
+void LaunchPad::fail()
+{
+    if (!launching)
+    {
+        // TODO: make fail animation
+
+        restart = true;
     }
 }

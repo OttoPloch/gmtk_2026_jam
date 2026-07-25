@@ -29,6 +29,8 @@ public:
     UIText* getUIText(std::string ID);
     UICollider* getUICollider(std::string ID);
 
+    void removeUICollider(std::string ID);
+
     void addToGroup(std::string groupID, UIElement* element);
     std::vector<UIElement*>* getGroup(std::string groupID);
 
@@ -37,9 +39,13 @@ public:
     void update(float dt);
 
     void draw(sf::RenderWindow& window);
+
+    std::unique_ptr<UIBackground> timeIndicator;
+    sf::Texture uiBackgroundTexture;
+    std::unique_ptr<UIText> levelIndicator;
+    sf::Font uiTextFont;
 private:
     std::map<std::string, std::unique_ptr<UIBackground>> backgrounds;
-    sf::Texture uiBackgroundTexture;
 
     std::map<std::string, std::unique_ptr<UIButton>> buttons;
     sf::Texture uiButtonTexture;
@@ -51,7 +57,6 @@ private:
     sf::Texture uiSliderTexture;
 
     std::map<std::string, std::unique_ptr<UIText>> text;
-    sf::Font uiTextFont;
 
     std::map<std::string, std::unique_ptr<UICollider>> colliders;
 

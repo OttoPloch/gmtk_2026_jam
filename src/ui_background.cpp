@@ -15,19 +15,7 @@ UIBackground::UIBackground(sf::Texture* texture, sf::FloatRect rect, BackgroundT
     sprites[7]->setTextureRect({{backgroundTemplate.texCoordOffset.x + backgroundTemplate.texCoordSize, backgroundTemplate.texCoordOffset.y + backgroundTemplate.texCoordSize * 2}, {backgroundTemplate.texCoordSize, backgroundTemplate.texCoordSize}});
     sprites[8]->setTextureRect({{backgroundTemplate.texCoordOffset.x + backgroundTemplate.texCoordSize * 2, backgroundTemplate.texCoordOffset.y + backgroundTemplate.texCoordSize * 2}, {backgroundTemplate.texCoordSize, backgroundTemplate.texCoordSize}});
 
-    float cornerSize = backgroundTemplate.texCoordSize * scale;
-    float middleLength = rect.size.x - cornerSize * 2;
-    float middleHeight = rect.size.y - cornerSize * 2;
-
-    sprites[0]->setScale({scale, scale});
-    sprites[1]->setScale({(middleLength / backgroundTemplate.texCoordSize) * scale, scale});
-    sprites[2]->setScale({scale, scale});
-    sprites[3]->setScale({scale, (middleHeight / backgroundTemplate.texCoordSize) * scale});
-    sprites[4]->setScale({(middleLength / backgroundTemplate.texCoordSize) * scale, (middleHeight / backgroundTemplate.texCoordSize) * scale});
-    sprites[5]->setScale({scale, (middleHeight / backgroundTemplate.texCoordSize) * scale});
-    sprites[6]->setScale({scale, scale});
-    sprites[7]->setScale({(middleLength / backgroundTemplate.texCoordSize) * scale, scale});
-    sprites[8]->setScale({scale, scale});
+    resize(rect.size);
 
     if (barOrientation != 'n')
     {
@@ -53,6 +41,27 @@ void UIBackground::draw(sf::RenderWindow& window)
         if (bar1) window.draw(*bar1);
         if (bar2) window.draw(*bar2);
     }
+}
+
+void UIBackground::resize(sf::Vector2f newSize)
+{
+    rect.size = newSize;
+
+    float cornerSize = backgroundTemplate.texCoordSize * scale;
+    float middleLength = rect.size.x - cornerSize * 2;
+    float middleHeight = rect.size.y - cornerSize * 2;
+
+    sprites[0]->setScale({scale, scale});
+    sprites[1]->setScale({(middleLength / backgroundTemplate.texCoordSize) * scale, scale});
+    sprites[2]->setScale({scale, scale});
+    sprites[3]->setScale({scale, (middleHeight / backgroundTemplate.texCoordSize) * scale});
+    sprites[4]->setScale({(middleLength / backgroundTemplate.texCoordSize) * scale, (middleHeight / backgroundTemplate.texCoordSize) * scale});
+    sprites[5]->setScale({scale, (middleHeight / backgroundTemplate.texCoordSize) * scale});
+    sprites[6]->setScale({scale, scale});
+    sprites[7]->setScale({(middleLength / backgroundTemplate.texCoordSize) * scale, scale});
+    sprites[8]->setScale({scale, scale});
+
+    updateVisuals();
 }
 
 void UIBackground::updateVisuals()

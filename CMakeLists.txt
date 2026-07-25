@@ -27,9 +27,10 @@ src/ui_dial.cpp
 src/ui_slider.cpp
 src/level.cpp
 src/ui_text.cpp
-src/levels.cpp
+src/level_1.cpp
 src/ui_element.cpp
 src/ui_collider.cpp
+src/level_2.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)

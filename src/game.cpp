@@ -3,8 +3,12 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/VideoMode.hpp>
+#include <cmath>
 #include <iostream>
-#include "levels.hpp"
+#include "defaults.hpp"
+#include "launch_pad.hpp"
+#include "level_1.hpp"
+#include "level_2.hpp"
 
 Game::Game() {}
 
@@ -15,11 +19,17 @@ void Game::start()
 
     launchPad.random = &random;
 
-    levels.emplace_back(std::make_unique<Level>(&window.window, &launchPad, &uiManager));
-    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager));
+    levels.emplace_back(std::make_unique<Level>(&window.window, &launchPad, &uiManager, -1));
+    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
+    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 10));
     currLevel = 1;
 
-    levels[currLevel]->setup("hide all", 0);
+    levels[currLevel]->setup();
+
+    uiManager.timeIndicator = std::make_unique<UIBackground>(&uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
+
+    uiManager.levelIndicator = std::make_unique<UIText>(sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 35, 5}, {30, 1}), &uiManager.uiTextFont, "9", true, sf::Color::White);
+    uiManager.levelIndicator->valueReadInt = &currLevel;
 
     run();
 }
@@ -97,7 +107,7 @@ void Game::events()
             }
             else if (keyPressed->code == sf::Keyboard::Key::R)
             {
-                levels[currLevel]->setup("hide all", 0);
+                levels[currLevel]->setup();
             }
             else if (keyPressed->code == sf::Keyboard::Key::F11)
             {
@@ -117,9 +127,24 @@ void Game::events()
 
 void Game::update()
 {
-    launchPad.update(dt, gameClock.getElapsedTime().asSeconds());
+    auto result = launchPad.update(dt, gameClock.getElapsedTime().asSeconds());
+
+    if (result.first)
+    {
+        if (result.second)
+        {
+            currLevel++;
+            levels[currLevel]->setup();
+        }
+        else
+        {
+            levels[currLevel]->setup();
+        }
+    }
 
     uiManager.update(dt);
+
+    if (uiManager.timeIndicator) uiManager.timeIndicator->resize({static_cast<float>(launchPad.getBackgroundSize().x) * levels[currLevel]->timeRemainingPercent() + 1, 6});
 
     levels[currLevel]->update(dt, gameClock.getElapsedTime().asSeconds());
 }

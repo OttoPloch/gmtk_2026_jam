@@ -9,6 +9,7 @@ UIText::UIText(sf::FloatRect rect, sf::Font* font, std::string content, bool aut
     setRect(rect, autoSetHeight);
 
     valueRead = nullptr;
+    valueReadInt = nullptr;
     valueInDegrees = false;
     valueDecimals = 2;
 }
@@ -25,6 +26,14 @@ void UIText::update()
         while (content.at(content.size() - 1) == '0') content.erase(content.size() - 1);
         if (content.at(content.size() - 1) == '.') content.erase(content.size() - 1);
 
+        if (valueInDegrees) content += "°";
+        
+        text.setString(content);
+    }
+    else if (valueReadInt)
+    {
+        content = std::to_string(*valueReadInt);
+        
         if (valueInDegrees) content += "°";
 
         text.setString(content);

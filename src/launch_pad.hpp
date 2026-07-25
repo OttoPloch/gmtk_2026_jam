@@ -15,13 +15,15 @@ public:
 
     void launch();
 
-    void update(float dt, float time);
+    std::pair<bool, bool> update(float dt, float time);
 
     void draw(sf::RenderWindow& window);
 
     sf::Vector2u getBackgroundSize();
 
     void addParticle(float time);
+
+    void fail();
 
     Random* random;
 private:
@@ -50,4 +52,6 @@ private:
 
     int particlesPerSecond;
     float particlesToMake;
+
+    bool restart;
 };

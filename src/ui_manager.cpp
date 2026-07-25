@@ -121,6 +121,15 @@ UICollider* UIManager::getUICollider(std::string ID)
     return nullptr;
 }
 
+void UIManager::removeUICollider(std::string ID)
+{
+    auto i = colliders.find(ID);
+    if (i != colliders.end())
+    {
+        colliders.erase(i);
+    }
+}
+
 void UIManager::addToGroup(std::string groupID, UIElement* element)
 {
     if (element)
@@ -163,6 +172,8 @@ void UIManager::update(float dt)
     for (auto& s : sliders) s.second->update();
     for (auto& t : text) t.second->update();
     for (auto& c : colliders) c.second->update();
+
+    if (levelIndicator) levelIndicator->update();
 }
 
 void UIManager::draw(sf::RenderWindow& window)
@@ -173,4 +184,7 @@ void UIManager::draw(sf::RenderWindow& window)
     for (auto& d : dials) d.second->draw(window);
     for (auto& s : sliders) s.second->draw(window);
     for (auto& c : colliders) c.second->draw(window);
+
+    if (levelIndicator) levelIndicator->draw(window);
+    if (timeIndicator) timeIndicator->draw(window);
 }

@@ -11,6 +11,7 @@ public:
 
     void draw(sf::RenderWindow& window);
 
+    void resize(sf::Vector2f newSize);
 private:
     void updateVisuals() override;
 
