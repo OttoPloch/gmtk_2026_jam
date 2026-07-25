@@ -11,6 +11,7 @@ UIText::UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std
     valueRead = nullptr;
     valueReadInt = nullptr;
     valueInDegrees = false;
+    valueInPercent = false;
     valueDecimals = 2;
 }
 
@@ -27,6 +28,7 @@ void UIText::update()
         if (content.at(content.size() - 1) == '.') content.erase(content.size() - 1);
 
         if (valueInDegrees) content += "°";
+        if (valueInPercent) content += "%";
         
         text.setString(content);
     }
@@ -35,6 +37,7 @@ void UIText::update()
         content = std::to_string(*valueReadInt);
         
         if (valueInDegrees) content += "°";
+        if (valueInPercent) content += "%";
 
         text.setString(content);
     }

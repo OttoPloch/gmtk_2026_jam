@@ -39,3 +39,16 @@ target_compile_features(app PRIVATE cxx_std_17)
 target_link_libraries(app PRIVATE SFML::Graphics SFML::Audio)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT app)
+
+add_custom_command(TARGET app POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets
+        $<TARGET_FILE_DIR:app>/assets
+)
+
+if(MINGW)
+    target_link_options(app PRIVATE
+        -static-libgcc
+        -static-libstdc++
+    )
+endif()

@@ -44,7 +44,7 @@ void Level2::createUI()
     powerDial = uiManager->addUIDial("power dial", window, {{panel2Pos.x + 10, panel2Pos.y + 25}, {50, 50}}, false, defaultTexCoords.dialTexCoords, -0, 100, 100./360/3);
     uiManager->addToGroup("panel2", powerDial);
     
-    UIText* text3 = uiManager->addUIText("power text", {{panel2Pos.x + 30, panel2Pos.y + 12}, {10, 100}}, "-45");
+    UIText* text3 = uiManager->addUIText("power text", {{panel2Pos.x + 27.5f, panel2Pos.y + 12}, {15, 100}}, "100%");
     uiManager->addToGroup("panel2", text3);
     
     uiManager->addToGroup("panel2",
@@ -53,7 +53,7 @@ void Level2::createUI()
     panel2Collider = uiManager->addUICollider("panel2Collider", window, {{panel2Pos.x - 15, 0}, {100, 10}}, false);
 
     text3->valueRead = &powerLevel;
-    text3->valueInDegrees = true;
+    text3->valueInPercent = true;
             
     panel2 = uiManager->getGroup("panel2");
 

@@ -5,11 +5,11 @@
 #include "sound_player.hpp"
 
 LaunchPad::LaunchPad() :
-bgTexture("../../assets/launch site.png"),
+bgTexture("assets/launch site.png"),
 background(bgTexture),
-launchPadTexture("../../assets/launch pad.png"),
+launchPadTexture("assets/launch pad.png"),
 launchPad(launchPadTexture),
-rocketTexture("../../assets/rocket.png"),
+rocketTexture("assets/rocket.png"),
 rocket(rocketTexture),
 rocketStartPosition(242, 216),
 rocketStartSpeed(.6f),
@@ -19,7 +19,7 @@ rocketSpeed(rocketStartSpeed)
 {
     rocket.setOrigin({rocket.getLocalBounds().size.x / 2.f, static_cast<float>(rocket.getLocalBounds().size.y)});
 
-    if (!particleTexture.loadFromFile("../../assets/particles.png"))
+    if (!particleTexture.loadFromFile("assets/particles.png"))
     {
         std::cout << "ERROR loading particle texture.\n";
     }

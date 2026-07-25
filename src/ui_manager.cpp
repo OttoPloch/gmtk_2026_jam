@@ -9,29 +9,29 @@ UIManager::UIManager() {}
 
 UIManager::UIManager(SoundPlayer* soundPlayer) : soundPlayer(soundPlayer)
 {
-    if (!uiBackgroundTexture.loadFromFile("../../assets/ui.png"))
+    if (!uiBackgroundTexture.loadFromFile("assets/ui.png"))
     {
         std::cout << "ERROR loading ui background texture.\n";
     }
 
-    if (!uiButtonTexture.loadFromFile("../../assets/buttons.png"))
+    if (!uiButtonTexture.loadFromFile("assets/buttons.png"))
     {
         std::cout << "ERROR loading ui button texture.\n";
     }
 
-    if (!uiDialTexture.loadFromFile("../../assets/dials.png"))
+    if (!uiDialTexture.loadFromFile("assets/dials.png"))
     {
         std::cout << "ERROR loading ui dial texture.\n";
     }
 
-    if (!uiSliderTexture.loadFromFile("../../assets/sliders.png"))
+    if (!uiSliderTexture.loadFromFile("assets/sliders.png"))
     {
         std::cout << "ERROR loading ui slider texture.\n";
     }
 
-    std::string fontFile = "../../assets/raster-forge-font/RasterForgeRegular-JpBgm.ttf";
-    // std::string fontFile = "../../assets/pixelated-elegance-font/PixelatedEleganceRegular-ovawB.ttf";
-    // std::string fontFile = "../../assets/ithaca-font/Ithaca-LVB75.ttf";
+    std::string fontFile = "assets/raster-forge-font/RasterForgeRegular-JpBgm.ttf";
+    // std::string fontFile = "assets/pixelated-elegance-font/PixelatedEleganceRegular-ovawB.ttf";
+    // std::string fontFile = "assets/ithaca-font/Ithaca-LVB75.ttf";
 
     if (!uiTextFont.openFromFile(fontFile))
     {

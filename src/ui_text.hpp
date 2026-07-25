@@ -18,6 +18,7 @@ public:
     float* valueRead;
     int* valueReadInt;
     bool valueInDegrees;
+    bool valueInPercent;
     int valueDecimals;
 private:
     void setRect(sf::FloatRect newRect, bool autoSetHeight = true);

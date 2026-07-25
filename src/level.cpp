@@ -2,7 +2,6 @@
 #include "launch_pad.hpp"
 #include "ui_manager.hpp"
 #include "sound_player.hpp"
-#include <iostream>
 
 Level::Level() {}
 
