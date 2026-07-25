@@ -33,7 +33,7 @@ void UIButton::update(float dt)
                 setTexCoords(texCoords[2]);
                 down = true;
 
-                soundPlayer->play("button");
+                if (group != "info") soundPlayer->play("button");
             }
 
             canClick = false;

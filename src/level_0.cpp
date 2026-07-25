@@ -33,13 +33,49 @@ void Level0::createUI()
 
     panel1 = uiManager->getGroup("panel1");
 
+
+
+    std::string infoTextContent = "Made for the 2026\nGMTK Game Jam.\nAttributions are below.\n\n\n";
+    infoTextContent += "Electronics-Flashlight-Plastic-Button-03.wav by DWOBoyle -- https://freesound.org/s/152535/ -- License: Attribution 4.0;\n\nbubble pop 6 by nomentero -- https://freesound.org/s/744144/ -- License: Creative Commons 0;\n\nTicking Timer 20 Sec.wav by LilMati -- https://freesound.org/s/487722/ -- License: Creative Commons 0;\n\nButton Click 1.wav by Mellau -- https://freesound.org/s/506054/ -- License: Attribution NonCommercial 4.0";
+
+    int newLineCounter = 0;
+    std::vector<int> newLineIndices;
+    for (int i = 0; i < infoTextContent.size(); i++)
+    {
+        if (infoTextContent[i] == '\n') newLineCounter = 0;
+
+        if (newLineCounter >= 25)
+        {
+            newLineIndices.emplace_back(i);
+
+            newLineCounter = 0;
+        }
+        else
+        {
+            newLineCounter++;
+        }
+    }
+
+    if (newLineIndices.size() > 0)
+    {
+        for (int i = newLineIndices.size() - 1; i >= 0; i--)
+        {
+            infoTextContent.insert(newLineIndices[i], "\n");
+        }
+    }
+
+    sf::Vector2f infoPos(static_cast<float>(launchPad->getBackgroundSize().x) - 150, 30);
+
     uiManager->defaultGroup = "info";
+
     infoButton = uiManager->addUIButton("info button", window, {{static_cast<float>(launchPad->getBackgroundSize().x) - 22, 10}, {1, 1}}, true, defaultTexCoords.buttonInfoTexCoords);
     
     uiManager->addToGroup("info", infoButton);
     uiManager->defaultGroup = "info display";
     uiManager->addToGroup("info display",
-    uiManager->addUIBackground("info bg", {{static_cast<float>(launchPad->getBackgroundSize().x) - 150, 30}, {130, 200}}, defaultTexCoords.bg, 'r'));
+    uiManager->addUIBackground("info bg", {infoPos, {130, 200}}, defaultTexCoords.bg, 'r'));
+    uiManager->addToGroup("info display",
+    uiManager->addUIText("info text", {infoPos + sf::Vector2f(15, 15), {98, 0}}, infoTextContent, 'h', sf::Color::White));
 
     infoGroup = uiManager->getGroup("info display");
 
