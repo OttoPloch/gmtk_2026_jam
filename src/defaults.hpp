@@ -13,14 +13,100 @@ struct SliderTemplate
     bool vertical; // false = horizontal
 };
 
+struct BackgroundTemplate
+{
+    int texCoordSize;
+    sf::Vector2i texCoordOffset;
+
+    sf::IntRect horizontalBarTexCoords;
+    sf::IntRect VerticalBarTexCoords;
+    sf::Vector2i horizontalBarLOrigin;
+    sf::Vector2i horizontalBarROrigin;
+    sf::Vector2i verticalBarTOrigin;
+    sf::Vector2i verticalBarBOrigin;
+    sf::Vector2i horizontalBar1LMargin;
+    sf::Vector2i horizontalBar2LMargin;
+    sf::Vector2i horizontalBar1RMargin;
+    sf::Vector2i horizontalBar2RMargin;
+    sf::Vector2i verticalBar1TMargin;
+    sf::Vector2i verticalBar2TMargin;
+    sf::Vector2i verticalBar1BMargin;
+    sf::Vector2i verticalBar2BMargin;
+};
+
 struct DefaultTexCoords
 {
+    //////////////// BACKGROUNDS ////////////////
+
     int bgTexCoordSize = 32;
-    int bgSmallTexCoordSize = 16;
-    int bgTextTexCoordSize = 5;
     sf::Vector2i bgTexCoordOffset = {0, 0};
+    sf::IntRect bgHorizontalBarTexCoords = sf::IntRect({0, 144}, {66, 13});
+    sf::IntRect bgVerticalBarTexCoords = sf::IntRect({80, 144}, {13, 66});
+    
+    BackgroundTemplate bg = {
+        bgTexCoordSize,
+        bgTexCoordOffset,
+        bgHorizontalBarTexCoords,
+        bgVerticalBarTexCoords,
+        {62, 0},
+        {1, 0},
+        {0, 62},
+        {0, 1},
+        {0, 10},
+        {0, 24},
+        {-4, 10},
+        {-4, 24},
+        {9, 0},
+        {24, 0},
+        {10, -4},
+        {24, -4}
+    };
+
+    int bgSmallTexCoordSize = 16;
     sf::Vector2i bgSmallTexCoordOffset = {0, 96};
-    sf::Vector2i bgTextTexCoordOffet = {48, 96};
+    sf::IntRect bgSmallHorizontalBarTexCoords = sf::IntRect({0, 160}, {39, 8});
+    sf::IntRect bgSmallVerticalBarTexCoords = sf::IntRect({64, 160}, {8, 39});
+
+    BackgroundTemplate bgSmall = {
+        bgSmallTexCoordSize,
+        bgSmallTexCoordOffset,
+        bgSmallHorizontalBarTexCoords,
+        bgSmallVerticalBarTexCoords,
+        {36, 0},
+        {1, 0},
+        {0, 36},
+        {0, 1},
+        {0, 5},
+        {0, 13},
+        {-2, 7},
+        {-2, 13},
+        {5, 0},
+        {13, 0},
+        {5, -2},
+        {13, -2}
+    };
+
+    int bgTextTexCoordSize = 5;
+    sf::Vector2i bgTextTexCoordOffset = {48, 96};
+
+    BackgroundTemplate bgText = {
+        bgTextTexCoordSize,
+        bgTextTexCoordOffset,
+        {{0, 0}, {0, 0}},
+        {{0, 0}, {0, 0}},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0}
+    };
+
+    /////////////////////////////////////////////
+
+    ////////////////// BUTTONS //////////////////
 
     std::array<sf::IntRect, 3> buttonTexCoords = {
         sf::IntRect({0, 0}, {36, 36}),
@@ -32,6 +118,8 @@ struct DefaultTexCoords
         sf::IntRect({18, 36}, {18, 19}),
         sf::IntRect({36, 36}, {18, 19})
     };
+
+    /////////////////////////////////////////////
 
     ////////////////// SLIDERS //////////////////
     // empty and full points for sliders are in percents
@@ -113,6 +201,8 @@ struct DefaultTexCoords
     };
 
     /////////////////////////////////////////////
+    
+    /////////////////// DIALS ///////////////////
 
     std::vector<sf::IntRect> dialTexCoords = {
         sf::IntRect({0, 0}, {32, 37}),
@@ -150,6 +240,8 @@ struct DefaultTexCoords
         sf::IntRect({32, 202}, {16, 18}),
         sf::IntRect({48, 202}, {16, 18})
     };
+
+    /////////////////////////////////////////////
 };
 
 static DefaultTexCoords defaultTexCoords;

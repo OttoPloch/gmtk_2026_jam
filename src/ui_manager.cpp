@@ -35,11 +35,11 @@ UIManager::UIManager()
     }
 }
 
-UIBackground* UIManager::addUIBackground(std::string ID, sf::FloatRect rect, int texCoordSize, sf::Vector2i texCoordOffset, sf::Texture* texture)
+UIBackground* UIManager::addUIBackground(std::string ID, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation, int barOffset, float scale, sf::Texture* texture)
 {
     if (!texture) texture = &uiBackgroundTexture;
 
-    return (backgrounds[ID] = std::make_unique<UIBackground>(texture, rect, texCoordSize, texCoordOffset)).get();
+    return (backgrounds[ID] = std::make_unique<UIBackground>(texture, rect, backgroundTemplate, barOrientation, barOffset, scale)).get();
 }
 
 UIButton* UIManager::addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture, float timeToRelease)
