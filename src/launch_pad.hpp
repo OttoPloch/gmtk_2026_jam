@@ -21,7 +21,7 @@ public:
 
     sf::Vector2u getBackgroundSize();
 
-    void addParticle(float time);
+    void addParticle(float time, bool exploding = false);
 
     void fail();
 
@@ -54,4 +54,9 @@ private:
     float particlesToMake;
 
     bool restart;
+    bool failing;
+
+    int fail_particlesPerSecond;
+    float fail_particlesToMake;
+    float timeFailing;
 };

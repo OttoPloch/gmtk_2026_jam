@@ -37,6 +37,8 @@ void Level::update(float dt, float time)
     if (timeTaken >= timeToComplete && timeToComplete > 0)
     {
         launchPad->fail();
+        
+        beginAnimation("hide all", 0);
     }
 
     specificUpdate(dt, time);
@@ -55,6 +57,6 @@ void Level::beginAnimation(std::string key, int layer)
 float Level::timeRemainingPercent()
 {
     if (timeToComplete <= 0) return 1;
-    
+
     return (timeToComplete - timeTaken) / timeToComplete;
 }

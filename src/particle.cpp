@@ -2,7 +2,7 @@
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include "random.hpp"
 
-Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, sf::Color color, float lifetime, sf::Vector2f velocity, bool fades, sf::Vector2f minBounds, sf::Vector2f maxBounds) : particle(*texture), color(color), lifetime(lifetime), velocity(velocity), fades(fades), minBounds(minBounds), maxBounds(maxBounds)
+Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect texCoords, sf::Texture* texture, sf::Color color, float lifetime, sf::Vector2f velocity, bool fades, bool shrinks, sf::Vector2f minBounds, sf::Vector2f maxBounds) : particle(*texture), color(color), lifetime(lifetime), velocity(velocity), fades(fades), shrinks(shrinks), minBounds(minBounds), maxBounds(maxBounds)
 {
     particleSize = rect.size;
 
@@ -15,6 +15,8 @@ Particle::Particle(Random* random, float time, sf::FloatRect rect, sf::IntRect t
     particleAlpha = 255;
     startTime = time;
     finished = false;
+
+    shrinkFactor = 0;
 }
 
 bool Particle::update(float dt, float time)
@@ -35,6 +37,15 @@ bool Particle::update(float dt, float time)
         {
             particleAlpha = std::min((255 - 255 * (elapsedTime / lifetime)), 255.f);
             particle.setColor(sf::Color(color.r, color.g, color.b, particleAlpha));
+        }
+
+        if (shrinks)
+        {
+            shrinkFactor += 2.f * dt;
+
+            if (shrinkFactor >= 1) return true;
+
+            particle.setScale({1 - shrinkFactor, 1 - shrinkFactor});
         }
 
         if (elapsedTime >= lifetime)

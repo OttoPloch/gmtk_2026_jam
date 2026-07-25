@@ -36,11 +36,16 @@ void LaunchPad::reset()
     particlesPerSecond = 60;
     particlesToMake = 0;
 
+    fail_particlesPerSecond = 30;
+    fail_particlesToMake = 0;
+    timeFailing = 0;
+
     particles_behind.clear();
     particles_middle.clear();
     particles_infront.clear();
 
     restart = false;
+    failing = false;
 }
 
 void LaunchPad::launch()
@@ -70,6 +75,29 @@ std::pair<bool, bool> LaunchPad::update(float dt, float time)
             return {true, true};
         }
     }
+    else if (failing)
+    {
+        if (timeFailing < 6.5f) fail_particlesPerSecond += timeFailing * 20 * dt;
+        else fail_particlesPerSecond += timeFailing * 100 * dt;
+
+        if (timeFailing < 6.5f) fail_particlesToMake += dt * fail_particlesPerSecond;
+
+        while (fail_particlesToMake >= 1)
+        {
+            addParticle(time, (timeFailing >= 5));
+
+            fail_particlesToMake -= 1;
+        }
+
+        if (timeFailing >= 8)
+        {
+            restart = true;
+        }
+
+        timeFailing += dt;
+
+        // std::cout << timeFailing << "; " << fail_particlesPerSecond << '\n';
+    }
 
     for (int i = 0; i < particles_behind.size(); i++)
     {
@@ -95,7 +123,7 @@ void LaunchPad::draw(sf::RenderWindow& window)
 {
     window.draw(background);
     for (auto& p : particles_behind) p.draw(window);
-    window.draw(rocket);
+    if (timeFailing < 6.5f) window.draw(rocket);
     for (auto& p : particles_middle) p.draw(window);
     window.draw(launchPad);
     for (auto& p : particles_infront) p.draw(window);
@@ -106,42 +134,110 @@ sf::Vector2u LaunchPad::getBackgroundSize()
     return bgTexture.getSize();
 }
 
-void LaunchPad::addParticle(float time)
+void LaunchPad::addParticle(float time, bool exploding)
 {
-    sf::Vector2f position({rocket.getPosition().x, rocket.getPosition().y + 2});
-    sf::IntRect texCoords({0, 0}, {16, 16});
-    bool fades = true;
-    sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
-    sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 10 + random->getRandInt(-3, 3));
-
-    float size;
-    sf::Color particleColor;
-    float lifetime;
-    sf::Vector2f velocity;
-
-    int layer = random->getRandInt(1, 3);
-
-    if (layer == 1 || layer == 3)
+    if (!failing)
     {
-        // vapor
-        size = random->getRandInt(4, 10);
-        int brightness = random->getRandInt(230, 255);
-        particleColor = sf::Color(brightness, brightness, brightness);
-        lifetime = random->getRandInt(1, 2);
-        velocity = sf::Vector2f(random->getRandInt(-20, 20), random->getRandInt(10, 30));
-
-        if (layer == 1) particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, minBounds, maxBounds);
-        else particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, minBounds, maxBounds);
+        sf::Vector2f position({rocket.getPosition().x, rocket.getPosition().y + 2});
+        sf::IntRect texCoords({0, 0}, {16, 16});
+        bool fades = true;
+        bool shrinks = false;
+        sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
+        sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 10 + random->getRandInt(-3, 3));
+    
+        float size;
+        sf::Color particleColor;
+        float lifetime;
+        sf::Vector2f velocity;
+    
+        int layer = random->getRandInt(1, 3);
+    
+        if (layer == 1 || layer == 3)
+        {
+            // vapor
+            size = random->getRandInt(4, 10);
+            int brightness = random->getRandInt(230, 255);
+            particleColor = sf::Color(brightness, brightness, brightness);
+            lifetime = random->getRandInt(1, 2);
+            velocity = sf::Vector2f(random->getRandInt(-20, 20), random->getRandInt(10, 30));
+    
+            if (layer == 1) particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);
+            else particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);
+        }
+        else if (layer == 2)
+        {
+            // fire
+            size = random->getRandInt(1, 6);
+            particleColor = sf::Color(random->getRandInt(200, 255), random->getRandInt(30, 100), 0);
+            lifetime = random->getRandInt(1, 2) / 3.f;
+            velocity = sf::Vector2f(random->getRandInt(-5, 5), random->getRandInt(5, 10));
+    
+            particles_middle.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);
+        }
     }
-    else if (layer == 2)
+    else
     {
-        // fire
-        size = random->getRandInt(1, 6);
-        particleColor = sf::Color(random->getRandInt(200, 255), random->getRandInt(30, 100), 0);
-        lifetime = random->getRandInt(1, 2) / 3.f;
-        velocity = sf::Vector2f(random->getRandInt(-5, 5), random->getRandInt(5, 10));
+        if (!exploding)
+        {
+            sf::Vector2f position({rocket.getPosition().x, rocket.getPosition().y - random->getRandInt(0, 40)});
+            sf::IntRect texCoords({0, 0}, {16, 16});
+            bool fades = true;
+            bool shrinks = true;
+            sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
+            sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 10 + random->getRandInt(-3, 3));
+        
+            float size;
+            sf::Color particleColor;
+            float lifetime;
+            sf::Vector2f velocity;
+        
+            // smoke
+            size = random->getRandInt(2, 20);
+            int brightness = random->getRandInt(140, 200);
+            particleColor = sf::Color(brightness + 20, brightness + 10, brightness);
+            lifetime = random->getRandInt(1, 8);
+            velocity = sf::Vector2f(random->getRandInt(-30, 30), random->getRandInt(-30, 30));
 
-        particles_middle.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, minBounds, maxBounds);
+            if (random->getRandInt(0, 1) == 1) particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);
+            else particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);
+        }
+        else
+        {
+            sf::Vector2f position({rocket.getPosition().x + random->getRandInt(-10, 10), rocket.getPosition().y - random->getRandInt(0, 40)});
+            sf::IntRect texCoords({0, 0}, {16, 16});
+            bool fades = true;
+            bool shrinks = true;
+            sf::Vector2f minBounds(0, -static_cast<int>(getBackgroundSize().y));
+            sf::Vector2f maxBounds(getBackgroundSize().x, rocketStartPosition.y + 10 + random->getRandInt(-3, 6));
+    
+            float size;
+            sf::Color particleColor;
+            float lifetime;
+            sf::Vector2f velocity;
+        
+            int type = random->getRandInt(1, 4);
+        
+            if (type == 1)
+            {
+                // smoke
+                size = random->getRandInt(5, 20);
+                int brightness = random->getRandInt(140, 200);
+                particleColor = sf::Color(brightness + 20, brightness + 10, brightness);
+                lifetime = random->getRandInt(1, 20);
+                velocity = sf::Vector2f(random->getRandInt(-50, 50), random->getRandInt(-50, 50));
+            }
+            else
+            {
+                // fire
+                size = random->getRandInt(3, 30);
+                particleColor = sf::Color(random->getRandInt(200, 255), random->getRandInt(30, 100), 0);
+                lifetime = random->getRandInt(1, 20) / 3.f;
+                velocity = sf::Vector2f(random->getRandInt(-100, 100), random->getRandInt(-100, 100));
+            }
+
+            if (random->getRandInt(0, 1) == 1) particles_behind.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);
+            else particles_infront.emplace_back(random, time, sf::FloatRect(position, {size, size}), texCoords, &particleTexture, particleColor, lifetime, velocity, fades, shrinks, minBounds, maxBounds);   
+        }
     }
 }
 
@@ -149,8 +245,6 @@ void LaunchPad::fail()
 {
     if (!launching)
     {
-        // TODO: make fail animation
-
-        restart = true;
+        failing = true;
     }
 }
