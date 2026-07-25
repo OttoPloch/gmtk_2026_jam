@@ -32,7 +32,7 @@ void Level::createUI()
 
 void Level::update(float dt, float time)
 {
-    timeTaken += dt;
+    if (!launchPad->launching && !launchPad->failing) timeTaken += dt;
 
     if (timeTaken >= timeToComplete && timeToComplete > 0)
     {

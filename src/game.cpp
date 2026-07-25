@@ -21,14 +21,14 @@ void Game::start()
 
     levels.emplace_back(std::make_unique<Level>(&window.window, &launchPad, &uiManager, -1));
     levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
-    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 10));
+    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 30));
     currLevel = 2;
 
     levels[currLevel]->setup();
 
     uiManager.timeIndicator = std::make_unique<UIBackground>(&uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
 
-    uiManager.levelIndicator = std::make_unique<UIText>(sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 35, 5}, {30, 1}), &uiManager.uiTextFont, "9", true, sf::Color::White);
+    uiManager.levelIndicator = std::make_unique<UIText>(sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 25, 5}, {20, 1}), &uiManager.uiTextFont, "9", true, sf::Color::White);
     uiManager.levelIndicator->valueReadInt = &currLevel;
 
     run();

@@ -26,6 +26,9 @@ public:
     void fail();
 
     Random* random;
+
+    bool launching;
+    bool failing;
 private:
     sf::Texture bgTexture;
     sf::Sprite background;
@@ -40,7 +43,6 @@ private:
     const float rocketStartSpeed;
     const float rocketSpeedMultiplier;
     
-    bool launching;
     float rocketSpeed;
 
 
@@ -54,7 +56,6 @@ private:
     float particlesToMake;
 
     bool restart;
-    bool failing;
 
     int fail_particlesPerSecond;
     float fail_particlesToMake;
