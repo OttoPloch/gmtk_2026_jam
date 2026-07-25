@@ -7,13 +7,11 @@
 class UIText : public UIElement
 {
 public:
-    UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, char autoSet = 'h', sf::Color color = sf::Color(60, 255, 60));
+    UIText(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, char autoSet = 'h', sf::Color color = sf::Color(60, 255, 60));
 
     void update();
 
     void draw(sf::RenderWindow& window) override;
-
-    sf::FloatRect getRect();
 
     float* valueRead;
     int* valueReadInt;

@@ -1,13 +1,17 @@
 #include "ui_manager.hpp"
 #include "ui_collider.hpp"
 #include "ui_dial.hpp"
+#include "utils.hpp"
 #include <SFML/Graphics/Rect.hpp>
+#include <SFML/Window/Mouse.hpp>
+#include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <limits>
 
 UIManager::UIManager() {}
 
-UIManager::UIManager(SoundPlayer* soundPlayer) : soundPlayer(soundPlayer)
+UIManager::UIManager(sf::RenderWindow* window, SoundPlayer* soundPlayer) : window(window), soundPlayer(soundPlayer)
 {
     if (!uiBackgroundTexture.loadFromFile("assets/ui.png"))
     {
@@ -44,7 +48,7 @@ UIBackground* UIManager::addUIBackground(std::string ID, sf::FloatRect rect, Bac
 {
     if (!texture) texture = &uiBackgroundTexture;
 
-    return (backgrounds[ID] = std::make_unique<UIBackground>(soundPlayer, texture, rect, backgroundTemplate, barOrientation, barOffset, scale)).get();
+    return (backgrounds[ID] = std::make_unique<UIBackground>(defaultGroup, this, soundPlayer, texture, rect, backgroundTemplate, barOrientation, barOffset, scale)).get();
 }
 
 UIButton* UIManager::addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture, float timeToRelease)
@@ -53,33 +57,33 @@ UIButton* UIManager::addUIButton(std::string ID, sf::RenderWindow* window, sf::F
 
     if (!texture) texture = &uiButtonTexture;
 
-    return (buttons[ID] = std::make_unique<UIButton>(soundPlayer, window, texture, rect, sizeIsScale, texCoords, timeToRelease)).get();
+    return (buttons[ID] = std::make_unique<UIButton>(defaultGroup, this, soundPlayer, window, texture, rect, sizeIsScale, texCoords, timeToRelease)).get();
 }
 
 UIDial* UIManager::addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale, sf::Texture* texture)
 {
     if (!texture) texture = &uiDialTexture;
 
-    return (dials[ID] = std::make_unique<UIDial>(soundPlayer, window, texture, rect, sizeIsScale, texCoords, minValue, maxValue, valueScale)).get();
+    return (dials[ID] = std::make_unique<UIDial>(defaultGroup, this, soundPlayer, window, texture, rect, sizeIsScale, texCoords, minValue, maxValue, valueScale)).get();
 }
 
 UISlider* UIManager::addUISlider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate, sf::Texture* texture)
 {
     if (!texture) texture = &uiSliderTexture;
 
-    return (sliders[ID] = std::make_unique<UISlider>(soundPlayer, window, texture, rect, sizeIsScale, sliderTemplate)).get();
+    return (sliders[ID] = std::make_unique<UISlider>(defaultGroup, this, soundPlayer, window, texture, rect, sizeIsScale, sliderTemplate)).get();
 }
 
 UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string content, char autoSet, sf::Color color, sf::Font* font)
 {
     if (!font) font = &uiTextFont;
 
-    return (text[ID] = std::make_unique<UIText>(soundPlayer, rect, font, content, autoSet, color)).get();
+    return (text[ID] = std::make_unique<UIText>(defaultGroup, this, soundPlayer, rect, font, content, autoSet, color)).get();
 }
 
 UICollider* UIManager::addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical)
 {
-    return (colliders[ID] = std::make_unique<UICollider>(soundPlayer, window, rect, vertical)).get();
+    return (colliders[ID] = std::make_unique<UICollider>(defaultGroup, this, soundPlayer, window, rect, vertical)).get();
 }
 
 UIBackground* UIManager::getUIBackground(std::string ID)
@@ -200,4 +204,46 @@ void UIManager::draw(sf::RenderWindow& window)
 
     if (*levelIndicator->valueReadInt != 0) levelIndicator->draw(window);
     if (timeIndicator) timeIndicator->draw(window);
+}
+
+bool UIManager::isGroupOnTopAtPoint(std::string group, bool useMousePos, sf::Vector2f point)
+{
+    if (useMousePos) point = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+
+    float left = std::numeric_limits<float>::max();
+    float right = std::numeric_limits<float>::min();
+    float top = std::numeric_limits<float>::max();
+    float bottom = std::numeric_limits<float>::min();
+
+    bool pastGroup = false;
+    for (auto& g : groups)
+    {
+        if (g.first == group)
+        {
+            pastGroup = true;
+            continue;
+        }
+
+        if (!pastGroup) continue;
+
+        for (auto& e : g.second)
+        {
+            sf::FloatRect currRect = e->getRect();
+
+            left = std::min(left, currRect.position.x);
+            right = std::max(right, currRect.position.x + currRect.size.x);
+            top = std::min(top, currRect.position.y);
+            bottom = std::max(bottom, currRect.position.y + currRect.size.y);
+
+        }
+
+        sf::FloatRect r({left, top}, {right - left, bottom - top});
+
+        if (collides(r, point) && pastGroup)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

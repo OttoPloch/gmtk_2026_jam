@@ -2,7 +2,7 @@
 #include "ui_element.hpp"
 #include <SFML/Graphics/Rect.hpp>
 
-UIText::UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, char autoSet, sf::Color color) : UIElement(soundPlayer, rect), content(content), text(*font, content, 300)
+UIText::UIText(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, char autoSet, sf::Color color) : UIElement(group, uiManager, soundPlayer, rect), content(content), text(*font, content, 300)
 {
     text.setFillColor(color);
 
@@ -46,11 +46,6 @@ void UIText::update()
 void UIText::draw(sf::RenderWindow& window)
 {
     window.draw(text);
-}
-
-sf::FloatRect UIText::getRect()
-{
-    return rect;
 }
 
 void UIText::setString(std::string newContent)

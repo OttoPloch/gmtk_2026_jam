@@ -3,7 +3,7 @@
 
 UIElement::UIElement() {}
 
-UIElement::UIElement(SoundPlayer* soundPlayer, sf::FloatRect rect) : soundPlayer(soundPlayer), rect(rect), position(rect.position), offset(0, 0) {}
+UIElement::UIElement(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::FloatRect rect) : group(group), uiManager(uiManager), soundPlayer(soundPlayer), rect(rect), position(rect.position), offset(0, 0) {}
 
 void UIElement::setPos(sf::Vector2f pos)
 {
@@ -46,4 +46,9 @@ void UIElement::draw(sf::RenderWindow& window)
 sf::Vector2f UIElement::getOffset()
 {
     return offset;
+}
+
+sf::FloatRect UIElement::getRect()
+{
+    return rect;
 }

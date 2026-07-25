@@ -5,6 +5,7 @@
 #include "ui_button.hpp"
 #include "ui_dial.hpp"
 #include "ui_collider.hpp"
+#include "random.hpp"
 
 Level4::Level4() {}
 
@@ -19,10 +20,10 @@ void Level4::createUI()
     engine1Calibration = -32;
     engine2Calibration = 47;
 
-    oxidizer = false;
-    fuel = false;
-    bomb = false;
-    pumps = false;
+    oxidizer = launchPad->random->getRandInt(0, 1);
+    fuel = launchPad->random->getRandInt(0, 1);
+    bomb = launchPad->random->getRandInt(0, 1);
+    pumps = launchPad->random->getRandInt(0, 1);
 
 
 
@@ -31,6 +32,7 @@ void Level4::createUI()
 
 
     sf::Vector2f panel1Pos(10, 20);
+    uiManager->defaultGroup = "panel1";
 
     launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
     UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", 'h', sf::Color::White);
@@ -44,12 +46,13 @@ void Level4::createUI()
 
     uiManager->addToGroup("panel1", launchButton);
 
+    uiManager->defaultGroup = "LEVEL";
     panel1Collider = uiManager->addUICollider("panel1Collider", window, {{0, panel1Pos.y - 15}, {10, 90}}, true);
     
     panel1 = uiManager->getGroup("panel1");
 
     sf::Vector2f panel2Pos(160, 10);
-    
+    uiManager->defaultGroup = "panel2";
     
     powerDial = uiManager->addUIDial("power dial", window, {{panel2Pos.x + 10, panel2Pos.y + 21}, {50, 50}}, false, defaultTexCoords.dialTexCoords, -0, 100, 100./360/3);
     UIText* text3 = uiManager->addUIText("power text", {{panel2Pos.x + 27.5f, panel2Pos.y + 79}, {15, 100}}, "100%");
@@ -88,6 +91,7 @@ void Level4::createUI()
     uiManager->addToGroup("panel2", engine2Label);
     uiManager->addToGroup("panel2", engine2Slider);
 
+    uiManager->defaultGroup = "LEVEL";
     panel2Collider = uiManager->addUICollider("panel2Collider", window, {{panel2Pos.x - 15, 0}, {175, 10}}, false);
 
     text3->valueRead = &powerLevel;
@@ -106,6 +110,7 @@ void Level4::createUI()
     
 
     sf::Vector2f panel3Pos(launchPad->getBackgroundSize().x - 140, 40);
+    uiManager->defaultGroup = "panel3";
 
     oxidizerButton = uiManager->addUIButton("oxidizer button", window, {{panel3Pos.x + 10, panel3Pos.y + 10}, {1, 1}}, true, defaultTexCoords.buttonSmallTexCoords);
     oxidizerText = uiManager->addUIText("oxidizer text", {{panel3Pos.x + 35, panel3Pos.y + 13}, {0, 4}}, "OFF", 'l');
@@ -159,6 +164,7 @@ void Level4::createUI()
     pumpsLabel);
     uiManager->addToGroup("panel3", pumpsButton);
 
+    uiManager->defaultGroup = "LEVEL";
     panel3Collider = uiManager->addUICollider("panel3Collider", window, {{static_cast<float>(launchPad->getBackgroundSize().x) - 5, panel3Pos.y - 15}, {10, 130}}, true);
 
     panel3 = uiManager->getGroup("panel3");

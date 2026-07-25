@@ -4,13 +4,14 @@
 #include <SFML/Graphics/Rect.hpp>
 
 class SoundPlayer;
+class UIManager;
 
 class UIElement
 {
 public:
     UIElement();
 
-    UIElement(SoundPlayer* soundPlayer, sf::FloatRect rect);
+    UIElement(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::FloatRect rect);
 
     void setPos(sf::Vector2f pos);
 
@@ -25,8 +26,13 @@ public:
     virtual void draw(sf::RenderWindow& window);
 
     sf::Vector2f getOffset();
+
+    sf::FloatRect getRect();
 protected:
+    std::string group;
+
     SoundPlayer* soundPlayer;
+    UIManager* uiManager;
 
     sf::FloatRect rect;
 

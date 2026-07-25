@@ -6,6 +6,7 @@
 #include "ui_button.hpp"
 #include "ui_dial.hpp"
 #include "ui_slider.hpp"
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <map>
 #include "ui_text.hpp"
 #include "ui_collider.hpp"
@@ -15,7 +16,7 @@ class UIManager
 public:
     UIManager();
 
-    UIManager(SoundPlayer* soundPlayer);
+    UIManager(sf::RenderWindow* window, SoundPlayer* soundPlayer);
 
     UIBackground* addUIBackground(std::string ID, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation = 'n', int barOffset = 5, float scale = 1.f, sf::Texture* texture = nullptr);
     UIButton* addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture = nullptr, float timeToRelease = 1.f);
@@ -42,12 +43,17 @@ public:
 
     void draw(sf::RenderWindow& window);
 
+    bool isGroupOnTopAtPoint(std::string group, bool useMousePos = true, sf::Vector2f point = {0, 0});
+
     std::unique_ptr<UIBackground> timeIndicator;
     sf::Texture uiBackgroundTexture;
     std::unique_ptr<UIText> levelIndicator;
     sf::Font uiTextFont;
 
     SoundPlayer* soundPlayer;
+    sf::RenderWindow* window;
+
+    std::string defaultGroup;
 private:
     std::map<std::string, std::unique_ptr<UIBackground>> backgrounds;
 

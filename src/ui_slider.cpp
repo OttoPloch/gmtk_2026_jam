@@ -2,14 +2,17 @@
 #include "utils.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include "sound_player.hpp"
+#include "ui_manager.hpp"
 
 UISlider::UISlider(
+    std::string group,
+    UIManager* uiManager, 
     SoundPlayer* soundPlayer, 
     sf::RenderWindow* window,
     sf::Texture* texture,
     sf::FloatRect rect, bool sizeIsScale,
     SliderTemplate sliderTemplate
-) : UIElement(soundPlayer, rect), window(window), handle(*texture), baseLeft(*texture), baseMiddle(*texture), baseRight(*texture), sliderTemplate(sliderTemplate)
+) : UIElement(group, uiManager, soundPlayer, rect), window(window), handle(*texture), baseLeft(*texture), baseMiddle(*texture), baseRight(*texture), sliderTemplate(sliderTemplate)
 {
     if (sizeIsScale) rect.size = {
         (sliderTemplate.baseTexCoords[0].size.x + sliderTemplate.baseTexCoords[1].size.x + sliderTemplate.baseTexCoords[2].size.x) * rect.size.x,
@@ -37,7 +40,7 @@ void UISlider::update()
 
     if (!grabbed)
     {
-        if (mouseCollide(handle.getGlobalBounds(), *window))
+        if (mouseCollide(handle.getGlobalBounds(), *window) && uiManager->isGroupOnTopAtPoint(group))
         {
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
             {

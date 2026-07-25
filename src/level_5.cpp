@@ -5,24 +5,24 @@
 #include "ui_button.hpp"
 #include "ui_dial.hpp"
 #include "ui_collider.hpp"
+#include "random.hpp"
 
 Level5::Level5() {}
 
-Level5::Level5(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete),
-powerLevel(0),
-engine1Calibration(-32),
-engine2Calibration(47)
+Level5::Level5(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete)
 {}
 
 void Level5::createUI()
 {
-    engine1Calibration = -32;
-    engine2Calibration = 47;
+    engine1Calibration = launchPad->random->getRandInt(-100, 100);
+    engine2Calibration = launchPad->random->getRandInt(-100, 100);
 
-    oxidizer = false;
-    fuel = false;
-    bomb = false;
-    pumps = false;
+    oxidizer = launchPad->random->getRandInt(0, 1);
+    fuel = launchPad->random->getRandInt(0, 1);
+    bomb = launchPad->random->getRandInt(0, 1);
+    pumps = launchPad->random->getRandInt(0, 1);
+
+    launchAngle = launchPad->random->getRandInt(-45, 45);
 
 
 
@@ -31,6 +31,7 @@ void Level5::createUI()
 
 
     sf::Vector2f panel1Pos(10, 20);
+    uiManager->defaultGroup = "panel1";
 
     launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
     UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", 'h', sf::Color::White);
@@ -44,12 +45,13 @@ void Level5::createUI()
 
     uiManager->addToGroup("panel1", launchButton);
 
+    uiManager->defaultGroup = "LEVEL";
     panel1Collider = uiManager->addUICollider("panel1Collider", window, {{0, panel1Pos.y - 15}, {10, 90}}, true);
     
     panel1 = uiManager->getGroup("panel1");
 
     sf::Vector2f panel2Pos(160, 10);
-    
+    uiManager->defaultGroup = "panel2";
     
     powerDial = uiManager->addUIDial("power dial", window, {{panel2Pos.x + 10, panel2Pos.y + 21}, {50, 50}}, false, defaultTexCoords.dialTexCoords, -0, 100, 100./360/3);
     UIText* text3 = uiManager->addUIText("power text", {{panel2Pos.x + 27.5f, panel2Pos.y + 79}, {15, 100}}, "100%");
@@ -88,6 +90,7 @@ void Level5::createUI()
     uiManager->addToGroup("panel2", engine2Label);
     uiManager->addToGroup("panel2", engine2Slider);
 
+    uiManager->defaultGroup = "LEVEL";
     panel2Collider = uiManager->addUICollider("panel2Collider", window, {{panel2Pos.x - 15, 0}, {175, 10}}, false);
 
     text3->valueRead = &powerLevel;
@@ -102,10 +105,11 @@ void Level5::createUI()
     engine2Slider->value = (engine2Calibration / 200.f) + .5f;
 
     panel2 = uiManager->getGroup("panel2");
-
     
 
+
     sf::Vector2f panel3Pos(launchPad->getBackgroundSize().x - 140, 40);
+    uiManager->defaultGroup = "panel3";
 
     oxidizerButton = uiManager->addUIButton("oxidizer button", window, {{panel3Pos.x + 10, panel3Pos.y + 10}, {1, 1}}, true, defaultTexCoords.buttonSmallTexCoords);
     oxidizerText = uiManager->addUIText("oxidizer text", {{panel3Pos.x + 35, panel3Pos.y + 13}, {0, 4}}, "OFF", 'l');
@@ -159,9 +163,38 @@ void Level5::createUI()
     pumpsLabel);
     uiManager->addToGroup("panel3", pumpsButton);
 
+    uiManager->defaultGroup = "LEVEL";
     panel3Collider = uiManager->addUICollider("panel3Collider", window, {{static_cast<float>(launchPad->getBackgroundSize().x) - 5, panel3Pos.y - 15}, {10, 130}}, true);
 
     panel3 = uiManager->getGroup("panel3");
+
+    
+
+    sf::Vector2f panel4Pos(350, 10);
+    uiManager->defaultGroup = "panel4";
+
+    angleDial = uiManager->addUIDial("angle dial", window, {{panel4Pos.x + 10, panel4Pos.y + 10}, {1, 1}}, true, defaultTexCoords.dialSmallTexCoords, -180, 0);
+    UIText* angleText = uiManager->addUIText("angle text", {{panel4Pos.x + 13, panel4Pos.y + 34}, {10, 1}}, "-45°");
+
+
+    uiManager->addToGroup("panel4",
+    uiManager->addUIBackground("panel3 bg", {panel4Pos, {50, 80}}, defaultTexCoords.bgSmall, 't'));
+
+    uiManager->addToGroup("panel4", angleDial);
+    uiManager->addToGroup("panel4",
+    uiManager->addUIBackground("angle text bg", {angleText->getRect().position - sf::Vector2f(3, 3), angleText->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
+    uiManager->addToGroup("panel4", angleText);
+
+    uiManager->defaultGroup = "LEVEL";
+    panel4Collider = uiManager->addUICollider("panel4Collider", window, {{panel4Pos.x - 15, 0}, {80, 10}}, false);
+
+    angleText->valueRead = &launchAngle;
+    angleText->valueDecimals = 0;
+    angleText->valueInDegrees = true;
+    
+    angleDial->setValue((launchAngle - 45) * 4);
+
+    panel4 = uiManager->getGroup("panel4");
 
     beginAnimation("hide all", 0);
 }
@@ -211,6 +244,11 @@ void Level5::specificUpdate(float dt, float time)
                     {
                         e->changeOffset({-offset, 0});
                     }
+
+                    for (auto e : *panel4)
+                    {
+                        e->changeOffset({0, offset});
+                    }
                 }
                 else if (currAnim->second <= 2)
                 {
@@ -229,6 +267,11 @@ void Level5::specificUpdate(float dt, float time)
                     for (auto e : *panel3)
                     {
                         e->changeOffset({-offset, 0});
+                    }
+
+                    for (auto e : *panel4)
+                    {
+                        e->changeOffset({0, offset});
                     }
                 }
                 else
@@ -337,6 +380,39 @@ void Level5::specificUpdate(float dt, float time)
     
                 currAnim->second += dt;
             }
+            else if (currAnim->first == "show4")
+            {
+                if (currAnim->second <= .001f)
+                {
+                    float offset = -150;
+    
+                    for (auto e : *panel4)
+                    {
+                        e->setOffset({0, offset});
+                    }
+                }
+    
+                if (currAnim->second <= .5f)
+                {
+                    float offset = 300 * dt;
+    
+                    for (auto e : *panel4)
+                    {
+                        e->changeOffset({0, offset});
+                    }
+                }
+                else
+                {
+                    for (auto e : *panel4)
+                    {
+                        e->setOffset({0, 0});
+                    }
+    
+                    animations[4].erase(animations[4].begin());
+                }
+    
+                currAnim->second += dt;
+            }
             else if (currAnim->first == "hide1")
             {
                 if (currAnim->second <= .001f)
@@ -436,6 +512,39 @@ void Level5::specificUpdate(float dt, float time)
     
                 currAnim->second += dt;
             }
+            else if (currAnim->first == "hide4")
+            {
+                if (currAnim->second <= .001f)
+                {
+                    float offset = 0;
+    
+                    for (auto e : *panel4)
+                    {
+                        e->setOffset({0, offset});
+                    }
+                }
+    
+                if (currAnim->second <= .5f)
+                {
+                    float offset = -300 * dt;
+    
+                    for (auto e : *panel4)
+                    {
+                        e->changeOffset({0, offset});
+                    }
+                }
+                else
+                {
+                    for (auto e : *panel4)
+                    {
+                        e->setOffset({0, -150});
+                    }
+    
+                    animations[4].erase(animations[4].begin());
+                }
+    
+                currAnim->second += dt;
+            }
         }
     }
 
@@ -485,11 +594,27 @@ void Level5::specificUpdate(float dt, float time)
                 }
             }
         }
+
+        if (panel4Collider && panel4Collider->onEnter())
+        {
+            if (animations[4].size() == 0)
+            {
+                if ((*panel4)[0]->getOffset() != sf::Vector2f(0, 0))
+                {
+                    beginAnimation("show4", 4);
+                }
+                else
+                {
+                    beginAnimation("hide4", 4);
+                }
+            }
+        }
     }
 
     if (powerDial) powerLevel = powerDial->getValue();
     if (engine1Slider) engine1Calibration = (engine1Slider->value - .5f) * 200.f;
     if (engine2Slider) engine2Calibration = (engine2Slider->value - .5f) * 200.f;
+    if (angleDial) launchAngle = (angleDial->getValue() / 2. + 45);
 
     if (oxidizerButton)
     {
@@ -552,8 +677,10 @@ void Level5::specificUpdate(float dt, float time)
         panel1Collider = nullptr;
         panel2Collider = nullptr;
         panel3Collider = nullptr;
+        panel4Collider = nullptr;
         uiManager->removeUICollider("panel1Collider");
         uiManager->removeUICollider("panel2Collider");
         uiManager->removeUICollider("panel3Collider");
+    uiManager->removeUICollider("panel4Collider");
     }
 }

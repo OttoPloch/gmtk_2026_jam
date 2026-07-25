@@ -9,7 +9,7 @@ Level::Level(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManage
 
 void Level::setup(std::string startAnimationKey, int animLayer)
 {
-    launchPad->soundPlayer->tickPlayer->stop();
+    launchPad->soundPlayer->stopAll();
 
     animations.clear();
     

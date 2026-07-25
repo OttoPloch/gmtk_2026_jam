@@ -11,6 +11,8 @@ public:
 
     void play(std::string soundName);
 
+    void stopAll();
+
     void update();
 
     std::unique_ptr<sf::Sound> tickPlayer;

@@ -3,8 +3,9 @@
 #include "utils.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include "ui_manager.hpp"
 
-UIDial::UIDial(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : UIElement(soundPlayer, rect), window(window), dial(*texture), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
+UIDial::UIDial(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : UIElement(group, uiManager, soundPlayer, rect), window(window), dial(*texture), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
 {
     if (sizeIsScale) rect.size = {texCoords[0].size.x * rect.size.x, texCoords[0].size.y * rect.size.y};
 
@@ -18,7 +19,7 @@ void UIDial::update()
 {
     sf::Vector2f center = {rect.position.x + rect.size.x / 2.f, rect.position.y + rect.size.y / 2.f};
 
-    if (circleMouseCollide(center, center.x - rect.position.x, *window))
+    if (circleMouseCollide(center, center.x - rect.position.x, *window) && uiManager->isGroupOnTopAtPoint(group))
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
@@ -75,6 +76,22 @@ void UIDial::draw(sf::RenderWindow& window)
 int UIDial::getValue()
 {
     return value;
+}
+
+void UIDial::setValue(int newValue)
+{
+    value = newValue;
+
+    if (value < minValue) value = minValue;
+    if (value > maxValue) value = maxValue;
+
+    float step = (360. * valueScale) / texCoords.size();
+    int index = std::fmod(value, 360. * valueScale) / step;
+    if (index < 0) index = texCoords.size() + index;
+
+    setTexCoords(texCoords[index]);
+
+    lastIndex = index;
 }
 
 void UIDial::setRect(sf::FloatRect newRect, sf::IntRect newTexCoords)

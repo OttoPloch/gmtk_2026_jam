@@ -9,7 +9,7 @@ class UISlider : public UIElement
 {
 public:
     // baseEmptyPoint and baseFullPoint are percents of the texture rect
-    UISlider(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate);
+    UISlider(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate);
 
     void update();
 

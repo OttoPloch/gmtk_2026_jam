@@ -27,9 +27,6 @@ private:
 
     std::vector<UIElement*>* panel1;
     UICollider* panel1Collider;
-
-    float launchAngle;
-    UIDial* angleDial;
     
     float engine1Calibration;
     UISlider* engine1Slider;
@@ -55,4 +52,10 @@ private:
     
     std::vector<UIElement*>* panel3;
     UICollider* panel3Collider;
+
+    float launchAngle;
+    UIDial* angleDial;
+
+    std::vector<UIElement*>* panel4;
+    UICollider* panel4Collider;
 };

@@ -7,7 +7,7 @@
 class UIBackground : public UIElement
 {
 public:
-    UIBackground(SoundPlayer* soundPlayer, sf::Texture* texture, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation = 'n', int barOffset = 5, float scale = 1.f);
+    UIBackground(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::Texture* texture, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation = 'n', int barOffset = 5, float scale = 1.f);
 
     void draw(sf::RenderWindow& window) override;
 

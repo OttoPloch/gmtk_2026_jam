@@ -8,13 +8,15 @@
 class UIDial : public UIElement
 {
 public:
-    UIDial(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1);
+    UIDial(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1);
 
     void update();
 
     void draw(sf::RenderWindow& window) override;
 
     int getValue();
+
+    void setValue(int newValue);
 private:
     void setRect(sf::FloatRect newRect, sf::IntRect newTexCoords);
 

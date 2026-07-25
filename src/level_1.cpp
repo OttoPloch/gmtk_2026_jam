@@ -16,6 +16,7 @@ void Level1::createUI()
 
 
     sf::Vector2f panel1Pos(10, 20);
+    uiManager->defaultGroup = "panel1";
 
     launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
     UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", 'h', sf::Color::White);

@@ -16,6 +16,7 @@ void Level0::createUI()
 
 
     sf::Vector2f panelPos(40, 60);
+    uiManager->defaultGroup = "panel1";
 
     startButton = uiManager->addUIButton("Button", window, {{panelPos.x + 15, panelPos.y + 20}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
     UIText* text = uiManager->addUIText("text", {{panelPos.x + 63, panelPos.y + 25}, {60, 1}}, "PLAY", 'h', sf::Color::White);

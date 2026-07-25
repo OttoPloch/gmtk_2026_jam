@@ -3,8 +3,9 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include "sound_player.hpp"
+#include "ui_manager.hpp"
 
-UIButton::UIButton(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : UIElement(soundPlayer, rect), window(window), button(*texture), texCoords(texCoords), timeToRelease(timeToRelease)
+UIButton::UIButton(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : UIElement(group, uiManager, soundPlayer, rect), window(window), button(*texture), texCoords(texCoords), timeToRelease(timeToRelease)
 {
     timeSincePressed = timeToRelease;
 
@@ -22,7 +23,7 @@ void UIButton::update(float dt)
 {
     down = false;
 
-    if (mouseCollide({rect.position - button.getOrigin(), rect.size}, *window))
+    if (mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) && uiManager->isGroupOnTopAtPoint(group))
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
         {
@@ -53,7 +54,7 @@ void UIButton::update(float dt)
     {
         setTexCoords(texCoords[0]);
     }
-    else if (timeSincePressed > .45f)// && (!mouseCollide({rect.position - button.getOrigin(), rect.size}, *window) || !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)))
+    else if (timeSincePressed > .45f)
     {
         setTexCoords(texCoords[1]);
     }

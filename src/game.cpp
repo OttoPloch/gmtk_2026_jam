@@ -25,7 +25,7 @@ void Game::start()
     launchPad.random = &random;
     launchPad.soundPlayer = &soundPlayer;
 
-    uiManager = UIManager(&soundPlayer);
+    uiManager = UIManager(&window.window, &soundPlayer);
 
     levels.emplace_back(std::make_unique<Level0>(&window.window, &launchPad, &uiManager, -1));
     levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
@@ -37,9 +37,9 @@ void Game::start()
 
     levels[currLevel]->setup();
 
-    uiManager.timeIndicator = std::make_unique<UIBackground>(&soundPlayer, &uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
+    uiManager.timeIndicator = std::make_unique<UIBackground>("LEVEL", &uiManager, &soundPlayer, &uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
 
-    uiManager.levelIndicator = std::make_unique<UIText>(&soundPlayer, sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 25, 5}, {20, 1}), &uiManager.uiTextFont, "9", 'h', sf::Color::White);
+    uiManager.levelIndicator = std::make_unique<UIText>("LEVEL", &uiManager, &soundPlayer, sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 25, 5}, {20, 1}), &uiManager.uiTextFont, "9", 'h', sf::Color::White);
     uiManager.levelIndicator->valueReadInt = &currLevel;
 
     run();

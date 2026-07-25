@@ -26,6 +26,13 @@ void SoundPlayer::play(std::string soundName)
     }
 }
 
+void SoundPlayer::stopAll()
+{
+    players.clear();
+
+    if (tickPlayer) tickPlayer->stop();
+}
+
 void SoundPlayer::update()
 {
     std::vector<int> playersToRemove;
