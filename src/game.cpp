@@ -25,9 +25,9 @@ void Game::start()
     uiManager = UIManager(&soundPlayer);
 
     levels.emplace_back(std::make_unique<Level0>(&window.window, &launchPad, &uiManager, -1));
-    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
-    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 30));
-    currLevel = 2;
+    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, 6));
+    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 10));
+    currLevel = 1;
 
     levels[currLevel]->setup();
 

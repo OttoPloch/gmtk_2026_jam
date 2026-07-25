@@ -1,6 +1,8 @@
 #include "level.hpp"
 #include "launch_pad.hpp"
 #include "ui_manager.hpp"
+#include "sound_player.hpp"
+#include <iostream>
 
 Level::Level() {}
 
@@ -30,13 +32,22 @@ void Level::createUI()
 void Level::update(float dt, float time)
 {
     if (!launchPad->launching && !launchPad->failing) timeTaken += dt;
+    else launchPad->soundPlayer->tickPlayer->stop();
 
-    if (timeTaken >= timeToComplete && timeToComplete > 0)
+    if (timeToComplete > 0)
     {
-        launchPad->fail();
-        
-        beginAnimation("hide all", 0);
+        if (timeTaken >= timeToComplete)
+        {
+            launchPad->fail();
+            
+            beginAnimation("hide all", 0);
+        }
+        else if (timeToComplete - timeTaken <= 5 && !launchPad->launching && !launchPad->failing && launchPad->soundPlayer->tickPlayer->getStatus() == sf::Sound::Status::Stopped)
+        {
+            launchPad->soundPlayer->tickPlayer->play();
+        }
     }
+
 
     specificUpdate(dt, time);
 }
