@@ -1,4 +1,5 @@
 #include "level_0.hpp"
+#include "defaults.hpp"
 #include "ui_manager.hpp"
 #include "launch_pad.hpp"
 
@@ -31,6 +32,22 @@ void Level0::createUI()
     uiManager->addToGroup("panel1", startButton);
 
     panel1 = uiManager->getGroup("panel1");
+
+    uiManager->defaultGroup = "info";
+    infoButton = uiManager->addUIButton("info button", window, {{static_cast<float>(launchPad->getBackgroundSize().x) - 22, 10}, {1, 1}}, true, defaultTexCoords.buttonInfoTexCoords);
+    
+    uiManager->addToGroup("info", infoButton);
+    uiManager->defaultGroup = "info display";
+    uiManager->addToGroup("info display",
+    uiManager->addUIBackground("info bg", {{static_cast<float>(launchPad->getBackgroundSize().x) - 150, 30}, {130, 200}}, defaultTexCoords.bg, 'r'));
+
+    infoGroup = uiManager->getGroup("info display");
+
+    showInfo = false;
+    for (auto& e : *infoGroup)
+    {
+        e->setOffset({150, 0});
+    }
 }
 
 void Level0::specificUpdate(float dt, float time)
@@ -85,6 +102,72 @@ void Level0::specificUpdate(float dt, float time)
     
                 currAnim->second += dt;
             }
+            else if (currAnim->first == "show info")
+            {
+                if (currAnim->second <= .001f)
+                {
+                    float offset = 150;
+    
+                    for (auto e : *infoGroup)
+                    {
+                        e->setOffset({offset, 0});
+                    }
+                }
+    
+                if (currAnim->second <= .5f)
+                {
+                    float offset = -300 * dt;
+    
+                    for (auto e : *infoGroup)
+                    {
+                        e->changeOffset({offset, 0});
+                    }
+                }
+                else
+                {
+                    for (auto e : *infoGroup)
+                    {
+                        e->setOffset({0, 0});
+                    }
+    
+                    animations[1].erase(animations[1].begin());
+                }
+    
+                currAnim->second += dt;
+            }
+            else if (currAnim->first == "hide info")
+            {
+                if (currAnim->second <= .001f)
+                {
+                    float offset = 0;
+    
+                    for (auto e : *infoGroup)
+                    {
+                        e->setOffset({offset, 0});
+                    }
+                }
+    
+                if (currAnim->second <= .5f)
+                {
+                    float offset = 300 * dt;
+    
+                    for (auto e : *infoGroup)
+                    {
+                        e->changeOffset({offset, 0});
+                    }
+                }
+                else
+                {
+                    for (auto e : *infoGroup)
+                    {
+                        e->setOffset({150, 0});
+                    }
+    
+                    animations[1].erase(animations[1].begin());
+                }
+    
+                currAnim->second += dt;
+            }
         }
     }
 
@@ -93,6 +176,20 @@ void Level0::specificUpdate(float dt, float time)
         beginAnimation("hide all", 0);
 
         started = true;
+    }
+
+    if (infoButton && infoButton->isDown())
+    {
+        showInfo = !showInfo;
+
+        if (showInfo)
+        {
+            beginAnimation("show info", 1);
+        }
+        else
+        {
+            beginAnimation("hide info", 1);
+        }
     }
 
     if (animations[0].size() == 0 && started)

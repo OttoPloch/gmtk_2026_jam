@@ -52,11 +52,11 @@ void Level3::createUI()
     UIText* text3 = uiManager->addUIText("power text", {{panel2Pos.x + 27.5f, panel2Pos.y + 79}, {15, 100}}, "100%");
     UIText* text4 = uiManager->addUIText("power label", {{panel2Pos.x + 9, panel2Pos.y + 11}, {50, 100}}, "LAUNCH POWER", 'h', sf::Color::White);
     engine1Slider = uiManager->addUISlider("1slider", window, {{panel2Pos.x + 70, panel2Pos.y + 12}, {2, 1}}, true, defaultTexCoords.horizontalSlider);
-    UIText* engine1Text = uiManager->addUIText("engine1 text", {{panel2Pos.x + 120, panel2Pos.y + 32}, {0, 2}}, "-100", 'l');
-    UIText* engine1Label = uiManager->addUIText("engine1label text", {{panel2Pos.x + 76, panel2Pos.y + 32}, {0, 2}}, "ENG 1 CALIBRATION", 'l', sf::Color::White);
+    UIText* engine1Text = uiManager->addUIText("engine1 text", {{panel2Pos.x + 76, panel2Pos.y + 42}, {0, 3}}, "-100", 'l');
+    UIText* engine1Label = uiManager->addUIText("engine1label text", {{panel2Pos.x + 76, panel2Pos.y + 32}, {0, 3}}, "ENG 1 CALIBRATION", 'l', sf::Color::White);
     engine2Slider = uiManager->addUISlider("2slider", window, {{panel2Pos.x + 70, panel2Pos.y + 52}, {2, 1}}, true, defaultTexCoords.horizontalSlider);
-    UIText* engine2Text = uiManager->addUIText("engine2 text", {{panel2Pos.x + 120, panel2Pos.y + 72}, {0, 2}}, "-100", 'l');
-    UIText* engine2Label = uiManager->addUIText("engine2label text", {{panel2Pos.x + 76, panel2Pos.y + 72}, {0, 2}}, "ENG 2 CALIBRATION", 'l', sf::Color::White);
+    UIText* engine2Text = uiManager->addUIText("engine2 text", {{panel2Pos.x + 76, panel2Pos.y + 82}, {0, 3}}, "-100", 'l');
+    UIText* engine2Label = uiManager->addUIText("engine2label text", {{panel2Pos.x + 76, panel2Pos.y + 72}, {0, 3}}, "ENG 2 CALIBRATION", 'l', sf::Color::White);
     
     uiManager->addToGroup("panel2",
     uiManager->addUIBackground("bg2", {panel2Pos, {145, 95}}, defaultTexCoords.bgSmall, 't'));

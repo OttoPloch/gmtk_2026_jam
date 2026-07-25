@@ -35,7 +35,7 @@ void Game::start()
     levels.emplace_back(std::make_unique<Level4>(&window.window, &launchPad, &uiManager, 15));
     levels.emplace_back(std::make_unique<Level5>(&window.window, &launchPad, &uiManager, 20));
     levels.emplace_back(std::make_unique<Level6>(&window.window, &launchPad, &uiManager, 30));
-    currLevel = 6;
+    currLevel = 0;
 
     levels[currLevel]->setup();
 

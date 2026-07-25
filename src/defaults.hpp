@@ -133,6 +133,11 @@ struct DefaultTexCoords
         sf::IntRect({18, 36}, {18, 19}),
         sf::IntRect({36, 36}, {18, 19})
     };
+    std::array<sf::IntRect, 3> buttonInfoTexCoords = {
+        sf::IntRect({0, 64}, {18, 18}),
+        sf::IntRect({0, 64}, {18, 18}),
+        sf::IntRect({0, 64}, {18, 18})
+    };
 
     /////////////////////////////////////////////
 

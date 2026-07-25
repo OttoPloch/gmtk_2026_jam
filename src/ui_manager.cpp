@@ -165,7 +165,10 @@ std::vector<UIElement*>* UIManager::getGroup(std::string groupID)
 
 void UIManager::resetUI()
 {
-    groups.clear();
+    groups = {
+        {"LEVEL", {}}
+    };
+
     backgrounds.clear();
     buttons.clear();
     dials.clear();

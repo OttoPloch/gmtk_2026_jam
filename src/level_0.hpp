@@ -21,4 +21,10 @@ private:
     std::vector<UIElement*>* panel1;
     UIButton* startButton;
     bool started;
+
+    UIButton* infoButton;
+
+    std::vector<UIElement*>* infoGroup;
+
+    bool showInfo;
 };
