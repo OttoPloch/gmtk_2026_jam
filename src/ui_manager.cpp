@@ -173,6 +173,7 @@ void UIManager::resetUI()
     buttons.clear();
     dials.clear();
     sliders.clear();
+    colliders.clear();
 }
 
 void UIManager::update(float dt)

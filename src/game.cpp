@@ -122,13 +122,21 @@ void Game::events()
             {
                 window.toggleFullscreen();
             }
-            else if (keyPressed->code == sf::Keyboard::Key::P)
+            else if (keyPressed->code == sf::Keyboard::Key::Right)
             {
-                launchPad.addParticle(gameClock.getElapsedTime().asSeconds());
+                if (currLevel < levels.size() - 1)
+                {
+                    currLevel++;
+                    levels[currLevel]->setup();
+                }
             }
-            else if (keyPressed->code == sf::Keyboard::Key::U)
+            else if (keyPressed->code == sf::Keyboard::Key::Left)
             {
-                levels[currLevel]->setup();
+                if (currLevel > 0)
+                {
+                    currLevel--;
+                    levels[currLevel]->setup();
+                }
             }
         }
     }
