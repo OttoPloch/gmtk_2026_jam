@@ -131,7 +131,16 @@ void UISlider::setRect(sf::FloatRect newRect)
         diff = full.x - empty.x;
     }
 
-    handle.setPosition(empty);
+    sf::Vector2f handlePos = handle.getPosition();
+    if (sliderTemplate.vertical)
+    {
+        handle.setPosition({empty.x, empty.y + diff * value});
+    }
+    else
+    {
+        handle.setPosition({empty.x + diff * value, empty.y});
+    }
+    
     baseLeft.setPosition(rect.position);
     baseMiddle.setPosition(rect.position + baseMiddlePositionOffset);
     baseRight.setPosition(rect.position + baseRightPositionOffset);

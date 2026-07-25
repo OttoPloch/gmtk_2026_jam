@@ -70,15 +70,6 @@ void Level1::createUI()
 
 void Level1::update(float dt, float time)
 {
-    if (animations.size() > 0)
-    {
-        for (auto a : animations)
-        {
-            std::cout << a.first << ", " << a.second.size() << "; ";
-        }
-        std::cout << '\n';
-    }
-
     std::vector<std::pair<std::string, float>*> animsToUpdate;
 
     for (auto& l : animations)
