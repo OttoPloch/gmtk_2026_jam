@@ -12,6 +12,8 @@ public:
     void draw(sf::RenderWindow& window);
 
     void resize(sf::Vector2f newSize);
+
+    void setColor(sf::Color color);
 private:
     void updateVisuals() override;
 

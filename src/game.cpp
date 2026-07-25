@@ -144,7 +144,36 @@ void Game::update()
 
     uiManager.update(dt);
 
-    if (uiManager.timeIndicator) uiManager.timeIndicator->resize({static_cast<float>(launchPad.getBackgroundSize().x) * levels[currLevel]->timeRemainingPercent() + 1, 6});
+    if (uiManager.timeIndicator)
+    {
+        float rem = levels[currLevel]->timeRemainingPercent();
+        
+        if (rem == 1)
+        {
+            uiManager.timeIndicator->setOffset({0, 100});
+        }
+        else
+        {
+            uiManager.timeIndicator->setOffset({0, 0});
+        }
+
+        int red;
+        int green;
+        
+        if (rem > .5f)
+        {
+            red = 255 * (1 - rem) * 2;
+            green = 255;
+        }
+        else
+        {
+            red = 255;
+            green = 255 * rem * 2;
+        }
+
+        uiManager.timeIndicator->resize({static_cast<float>(launchPad.getBackgroundSize().x) * rem + 1, 6});
+        uiManager.timeIndicator->setColor(sf::Color(red, green, 0));
+    }
 
     levels[currLevel]->update(dt, gameClock.getElapsedTime().asSeconds());
 }

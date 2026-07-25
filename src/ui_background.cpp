@@ -64,6 +64,14 @@ void UIBackground::resize(sf::Vector2f newSize)
     updateVisuals();
 }
 
+void UIBackground::setColor(sf::Color color)
+{
+    for (auto& s : sprites)
+    {
+        if (s) s->setColor(color);
+    }
+}
+
 void UIBackground::updateVisuals()
 {
     float cornerSize = backgroundTemplate.texCoordSize * scale;
