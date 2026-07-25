@@ -15,6 +15,8 @@ class UIManager
 public:
     UIManager();
 
+    UIManager(SoundPlayer* soundPlayer);
+
     UIBackground* addUIBackground(std::string ID, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation = 'n', int barOffset = 5, float scale = 1.f, sf::Texture* texture = nullptr);
     UIButton* addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture = nullptr, float timeToRelease = 1.f);
     UIDial* addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1, sf::Texture* texture = nullptr);
@@ -44,6 +46,8 @@ public:
     sf::Texture uiBackgroundTexture;
     std::unique_ptr<UIText> levelIndicator;
     sf::Font uiTextFont;
+
+    SoundPlayer* soundPlayer;
 private:
     std::map<std::string, std::unique_ptr<UIBackground>> backgrounds;
 

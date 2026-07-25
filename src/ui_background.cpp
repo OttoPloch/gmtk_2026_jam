@@ -1,7 +1,7 @@
 #include "ui_background.hpp"
 #include <memory>
 
-UIBackground::UIBackground(sf::Texture* texture, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation, int barOffset, float scale) : UIElement(rect), backgroundTemplate(backgroundTemplate), barOrientation(barOrientation), barOffset(barOffset), scale(scale)
+UIBackground::UIBackground(SoundPlayer* soundPlayer, sf::Texture* texture, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation, int barOffset, float scale) : UIElement(soundPlayer, rect), backgroundTemplate(backgroundTemplate), barOrientation(barOrientation), barOffset(barOffset), scale(scale)
 {
     for (int i = 0; i < 9; i++) sprites[i] = std::make_unique<sf::Sprite>(*texture);
 

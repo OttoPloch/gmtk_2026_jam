@@ -8,7 +8,7 @@
 class UIDial : public UIElement
 {
 public:
-    UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1);
+    UIDial(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1);
 
     void update();
 
@@ -30,6 +30,7 @@ private:
 
     sf::Sprite dial;
 
+    int lastIndex;
     std::vector<sf::IntRect> texCoords;
 
     float value;

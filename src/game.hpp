@@ -6,6 +6,7 @@
 #include "random.hpp"
 #include "ui_manager.hpp"
 #include "level.hpp"
+#include "sound_player.hpp"
 
 class Game
 {
@@ -30,6 +31,8 @@ private:
     UIManager uiManager;
     std::vector<std::unique_ptr<Level>> levels;
     int currLevel;
+
+    SoundPlayer soundPlayer;
 
     sf::Clock dtClock;
     float dt;

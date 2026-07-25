@@ -1,9 +1,10 @@
 #include "ui_dial.hpp"
+#include "sound_player.hpp"
 #include "utils.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-UIDial::UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : UIElement(rect), window(window), dial(*texture), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
+UIDial::UIDial(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : UIElement(soundPlayer, rect), window(window), dial(*texture), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
 {
     if (sizeIsScale) rect.size = {texCoords[0].size.x * rect.size.x, texCoords[0].size.y * rect.size.y};
 
@@ -56,9 +57,13 @@ void UIDial::update()
 
         float step = (360. * valueScale) / texCoords.size();
         int index = std::fmod(value, 360. * valueScale) / step;
-
         if (index < 0) index = texCoords.size() + index;
+
+        if (lastIndex != index) soundPlayer->play("dial spin");
+
         setTexCoords(texCoords[index]);
+
+        lastIndex = index;
     }
 }
 

@@ -31,9 +31,11 @@ src/level_1.cpp
 src/ui_element.cpp
 src/ui_collider.cpp
 src/level_2.cpp
+src/sound_player.cpp
+src/level_0.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)
-target_link_libraries(app PRIVATE SFML::Graphics)
+target_link_libraries(app PRIVATE SFML::Graphics SFML::Audio)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT app)

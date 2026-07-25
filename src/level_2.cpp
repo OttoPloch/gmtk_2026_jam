@@ -33,41 +33,9 @@ void Level2::createUI()
     panel1Collider = uiManager->addUICollider("panel1Collider", window, {{0, panel1Pos.y - 15}, {10, 90}}, true);
 
     panel1 = uiManager->getGroup("panel1");
-        
-        // sf::Vector2f panel1Pos(10, 20);
-        
-        // uiManager->addToGroup("panel1",
-        // uiManager->addUIBackground("bg", {panel1Pos, {120, 80}}, defaultTexCoords.bgSmall, 'l'));
-        
-        // launchButton = uiManager->addUIButton("launch", window, {{panel1Pos.x + 10, panel1Pos.y + 48}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
-        // uiManager->addToGroup("panel1", launchButton);
-        
-        // UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", true, sf::Color::White);
-        // uiManager->addToGroup("panel1", text);
-        
-        // uiManager->addToGroup("panel1",
-        //     uiManager->addUIBackground("text bg", {text->getRect().position - sf::Vector2f(3, 3), text->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
-        
-        // powerDial = uiManager->addUIDial("dial", window, {{panel1Pos.x + 55, 50}, {1, 1}}, true, defaultTexCoords.dialSmallTexCoords, 0, 100, 100./360/3);
-        // uiManager->addToGroup("panel1", powerDial);
-        
-        // uiManager->addToGroup("panel1",
-        // uiManager->addUISlider("slider", window, {{panel1Pos.x + 80, panel1Pos.y + 48}, {1, 1}}, true, defaultTexCoords.smallHorizontalSlider));
-        // uiManager->addToGroup("panel1",
-        // uiManager->addUISlider("slider2", window, {{panel1Pos.x + 80, panel1Pos.y + 62}, {1, 1}}, true, defaultTexCoords.smallHorizontalSlider));
-        
-        // UIText* text2 = uiManager->addUIText("text2", {{panel1Pos.x + 58, panel1Pos.y + 20}, {10, 100}}, "100");
-    // uiManager->addToGroup("panel1", text2);
     
-    // uiManager->addToGroup("panel1",
-    // uiManager->addUIBackground("text2 bg", {{text2->getRect().position.x - 3, text2->getRect().position.y - 3}, {text2->getRect().size.x + 6, text2->getRect().size.y + 6}}, defaultTexCoords.bgText));
-    
-    // panel1Collider = uiManager->addUICollider("panel1Collider", window, {{0, panel1Pos.y - 15}, {10, 110}}, true);
-    
-    // text2->valueRead = &powerLevel;
-    
-    // panel1 = uiManager->getGroup("panel1");
-    
+
+
     sf::Vector2f panel2Pos(160, 10);
     
     uiManager->addToGroup("panel2",

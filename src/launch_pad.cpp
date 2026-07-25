@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <iostream>
 #include "random.hpp"
+#include "sound_player.hpp"
 
 LaunchPad::LaunchPad() :
 bgTexture("../../assets/launch site.png"),
@@ -46,15 +47,31 @@ void LaunchPad::reset()
 
     restart = false;
     failing = false;
+
+    goToNextLevel = false;
+
+    popped = false;
 }
 
 void LaunchPad::launch()
 {
+    soundPlayer->play("launch");
+
     launching = true;
+}
+
+void LaunchPad::nextLevel()
+{
+    goToNextLevel = true;
 }
 
 std::pair<bool, bool> LaunchPad::update(float dt, float time)
 {
+    if (goToNextLevel)
+    {
+        return {true, true};
+    }
+
     if (launching)
     {
         particlesToMake += dt * particlesPerSecond;
@@ -77,10 +94,15 @@ std::pair<bool, bool> LaunchPad::update(float dt, float time)
     }
     else if (failing)
     {
-        if (timeFailing < 6.5f) fail_particlesPerSecond += timeFailing * 20 * dt;
+        if (timeFailing < 6) fail_particlesPerSecond += timeFailing * 20 * dt;
         else fail_particlesPerSecond += timeFailing * 100 * dt;
 
-        if (timeFailing < 6.5f) fail_particlesToMake += dt * fail_particlesPerSecond;
+        if (timeFailing < 6) fail_particlesToMake += dt * fail_particlesPerSecond;
+        else if (!popped)
+        {
+            soundPlayer->play("pop");
+            popped = true;
+        }
 
         while (fail_particlesToMake >= 1)
         {
@@ -89,14 +111,12 @@ std::pair<bool, bool> LaunchPad::update(float dt, float time)
             fail_particlesToMake -= 1;
         }
 
-        if (timeFailing >= 8)
+        if (timeFailing >= 7)
         {
             restart = true;
         }
 
         timeFailing += dt;
-
-        // std::cout << timeFailing << "; " << fail_particlesPerSecond << '\n';
     }
 
     for (int i = 0; i < particles_behind.size(); i++)
@@ -123,7 +143,7 @@ void LaunchPad::draw(sf::RenderWindow& window)
 {
     window.draw(background);
     for (auto& p : particles_behind) p.draw(window);
-    if (timeFailing < 6.5f) window.draw(rocket);
+    if (timeFailing < 5.5) window.draw(rocket);
     for (auto& p : particles_middle) p.draw(window);
     window.draw(launchPad);
     for (auto& p : particles_infront) p.draw(window);

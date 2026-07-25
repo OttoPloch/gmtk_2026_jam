@@ -1,7 +1,7 @@
 #include "ui_collider.hpp"
 #include "utils.hpp"
 
-UICollider::UICollider(sf::RenderWindow* window, sf::FloatRect rect, bool vertical) : UIElement(rect), window(window), vertical(vertical)
+UICollider::UICollider(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::FloatRect rect, bool vertical) : UIElement(soundPlayer, rect), window(window), vertical(vertical)
 {
     collides = false;
     collidedLastFrame = false;

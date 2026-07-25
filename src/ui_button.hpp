@@ -8,7 +8,7 @@
 class UIButton : public UIElement
 {
 public:
-    UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease = 1.f);
+    UIButton(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease = 1.f);
 
     void update(float dt);
 

@@ -3,12 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
+class SoundPlayer;
+
 class UIElement
 {
 public:
     UIElement();
 
-    UIElement(sf::FloatRect rect);
+    UIElement(SoundPlayer* soundPlayer, sf::FloatRect rect);
 
     void setPos(sf::Vector2f pos);
 
@@ -22,6 +24,8 @@ public:
 
     sf::Vector2f getOffset();
 protected:
+    SoundPlayer* soundPlayer;
+
     sf::FloatRect rect;
 
     sf::Vector2f position;

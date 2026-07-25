@@ -5,6 +5,8 @@
 
 class LaunchPad;
 class UIManager;
+class UIElement;
+class UIButton;
 
 class Level
 {

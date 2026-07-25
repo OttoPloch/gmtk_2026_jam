@@ -2,12 +2,15 @@
 #include "utils.hpp"
 #include <SFML/Window/Mouse.hpp>
 
+#include <iostream>
+
 UISlider::UISlider(
+    SoundPlayer* soundPlayer, 
     sf::RenderWindow* window,
     sf::Texture* texture,
     sf::FloatRect rect, bool sizeIsScale,
     SliderTemplate sliderTemplate
-) : UIElement(rect), window(window), handle(*texture), baseLeft(*texture), baseMiddle(*texture), baseRight(*texture), sliderTemplate(sliderTemplate)
+) : UIElement(soundPlayer, rect), window(window), handle(*texture), baseLeft(*texture), baseMiddle(*texture), baseRight(*texture), sliderTemplate(sliderTemplate)
 {
     if (sizeIsScale) rect.size = {
         (sliderTemplate.baseTexCoords[0].size.x + sliderTemplate.baseTexCoords[1].size.x + sliderTemplate.baseTexCoords[2].size.x) * rect.size.x,
@@ -21,20 +24,11 @@ UISlider::UISlider(
     
     handle.setOrigin(sliderTemplate.handleOrigin);
 
-    scale = {
-        rect.size.x / (sliderTemplate.baseTexCoords[0].size.x + sliderTemplate.baseTexCoords[1].size.x + sliderTemplate.baseTexCoords[2].size.x),
-        rect.size.y / (sliderTemplate.baseTexCoords[0].size.y + sliderTemplate.baseTexCoords[1].size.y + sliderTemplate.baseTexCoords[2].size.y)
-    };
-    handle.setScale(scale);
-    baseLeft.setScale(scale);
-    baseMiddle.setScale(scale);
-    baseRight.setScale(scale);
+    value = 0;
 
     setRect(rect);
 
     grabbed = false;
-
-    value = 0;
 }
 
 void UISlider::update()
@@ -96,6 +90,8 @@ void UISlider::update()
             }
         }
     }
+
+    std::cout << value << '\n';
 }
 
 void UISlider::draw(sf::RenderWindow& window)
@@ -110,10 +106,23 @@ void UISlider::setRect(sf::FloatRect newRect)
 {
     rect = newRect;
 
+    scale = {
+        1, 1
+    };
+    middleScale = {
+        rect.size.x / (sliderTemplate.baseTexCoords[0].size.x + sliderTemplate.baseTexCoords[1].size.x + sliderTemplate.baseTexCoords[2].size.x),
+        rect.size.y / (sliderTemplate.baseTexCoords[0].size.y + sliderTemplate.baseTexCoords[1].size.y + sliderTemplate.baseTexCoords[2].size.y)
+    };
+    handle.setScale(scale);
+    baseLeft.setScale(scale);
+    baseMiddle.setScale(middleScale);
+    baseRight.setScale(scale);
+
     baseMiddlePositionOffset = static_cast<sf::Vector2f>(sliderTemplate.baseTexCoords[1].position - sliderTemplate.baseTexCoords[0].position);
     baseMiddlePositionOffset = {baseMiddlePositionOffset.x * scale.x, baseMiddlePositionOffset.y * scale.y};
-    baseRightPositionOffset = static_cast<sf::Vector2f>(sliderTemplate.baseTexCoords[2].position - sliderTemplate.baseTexCoords[0].position);
-    baseRightPositionOffset = {baseRightPositionOffset.x * scale.x, baseRightPositionOffset.y * scale.y};
+    baseRightPositionOffset = static_cast<sf::Vector2f>(sliderTemplate.baseTexCoords[1].position - sliderTemplate.baseTexCoords[0].position);
+    baseRightPositionOffset = {baseRightPositionOffset.x * middleScale.x, baseRightPositionOffset.y * middleScale.y};
+    baseRightPositionOffset += baseMiddlePositionOffset;
 
     empty = {rect.position.x + sliderTemplate.baseTexCoords[0].size.x * sliderTemplate.emptyPoint.x * scale.x, std::round(rect.position.y + sliderTemplate.baseTexCoords[0].size.y * sliderTemplate.emptyPoint.y * scale.y)};
     full = {rect.position.x + baseRightPositionOffset.x + sliderTemplate.baseTexCoords[2].size.x * sliderTemplate.fullPoint.x * scale.x, std::round(rect.position.y + baseRightPositionOffset.y + sliderTemplate.baseTexCoords[2].size.y * sliderTemplate.fullPoint.y * scale.y)};

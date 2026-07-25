@@ -4,6 +4,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include "particle.hpp"
 
+class SoundPlayer;
 class Random;
 
 class LaunchPad
@@ -14,6 +15,8 @@ public:
     void reset();
 
     void launch();
+
+    void nextLevel();
 
     std::pair<bool, bool> update(float dt, float time);
 
@@ -26,6 +29,7 @@ public:
     void fail();
 
     Random* random;
+    SoundPlayer* soundPlayer;
 
     bool launching;
     bool failing;
@@ -60,4 +64,8 @@ private:
     int fail_particlesPerSecond;
     float fail_particlesToMake;
     float timeFailing;
+
+    bool goToNextLevel;
+
+    bool popped;
 };

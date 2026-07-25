@@ -6,7 +6,7 @@
 class UICollider : public UIElement
 {
 public:
-    UICollider(sf::RenderWindow* window, sf::FloatRect rect, bool vertical);
+    UICollider(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::FloatRect rect, bool vertical);
 
     bool onEnter();
 

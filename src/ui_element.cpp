@@ -1,8 +1,9 @@
 #include "ui_element.hpp"
+#include "sound_player.hpp"
 
 UIElement::UIElement() {}
 
-UIElement::UIElement(sf::FloatRect rect) : rect(rect), position(rect.position), offset(0, 0) {}
+UIElement::UIElement(SoundPlayer* soundPlayer, sf::FloatRect rect) : soundPlayer(soundPlayer), rect(rect), position(rect.position), offset(0, 0) {}
 
 void UIElement::setPos(sf::Vector2f pos)
 {

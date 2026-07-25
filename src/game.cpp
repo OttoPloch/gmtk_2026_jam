@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -7,6 +8,7 @@
 #include <iostream>
 #include "defaults.hpp"
 #include "launch_pad.hpp"
+#include "level_0.hpp"
 #include "level_1.hpp"
 #include "level_2.hpp"
 
@@ -18,17 +20,20 @@ void Game::start()
     window.create(sf::VideoMode(window.windowedResolution), sf::Style::Close, 60);
 
     launchPad.random = &random;
+    launchPad.soundPlayer = &soundPlayer;
 
-    levels.emplace_back(std::make_unique<Level>(&window.window, &launchPad, &uiManager, -1));
+    uiManager = UIManager(&soundPlayer);
+
+    levels.emplace_back(std::make_unique<Level0>(&window.window, &launchPad, &uiManager, -1));
     levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
     levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 30));
     currLevel = 2;
 
     levels[currLevel]->setup();
 
-    uiManager.timeIndicator = std::make_unique<UIBackground>(&uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
+    uiManager.timeIndicator = std::make_unique<UIBackground>(&soundPlayer, &uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
 
-    uiManager.levelIndicator = std::make_unique<UIText>(sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 25, 5}, {20, 1}), &uiManager.uiTextFont, "9", true, sf::Color::White);
+    uiManager.levelIndicator = std::make_unique<UIText>(&soundPlayer, sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 25, 5}, {20, 1}), &uiManager.uiTextFont, "9", true, sf::Color::White);
     uiManager.levelIndicator->valueReadInt = &currLevel;
 
     run();
@@ -101,10 +106,6 @@ void Game::events()
             {
                 quit();
             }
-            else if (keyPressed->code == sf::Keyboard::Key::Enter)
-            {
-                // launchPad.launch();
-            }
             else if (keyPressed->code == sf::Keyboard::Key::R)
             {
                 levels[currLevel]->setup();
@@ -127,12 +128,16 @@ void Game::events()
 
 void Game::update()
 {
+    soundPlayer.update();
+
     auto result = launchPad.update(dt, gameClock.getElapsedTime().asSeconds());
 
     if (result.first)
     {
         if (result.second)
         {
+            if (currLevel > 0) soundPlayer.play("level finish");
+
             currLevel++;
             levels[currLevel]->setup();
         }

@@ -5,7 +5,9 @@
 #include <iostream>
 #include <algorithm>
 
-UIManager::UIManager()
+UIManager::UIManager() {}
+
+UIManager::UIManager(SoundPlayer* soundPlayer) : soundPlayer(soundPlayer)
 {
     if (!uiBackgroundTexture.loadFromFile("../../assets/ui.png"))
     {
@@ -37,11 +39,12 @@ UIManager::UIManager()
     }
 }
 
+
 UIBackground* UIManager::addUIBackground(std::string ID, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation, int barOffset, float scale, sf::Texture* texture)
 {
     if (!texture) texture = &uiBackgroundTexture;
 
-    return (backgrounds[ID] = std::make_unique<UIBackground>(texture, rect, backgroundTemplate, barOrientation, barOffset, scale)).get();
+    return (backgrounds[ID] = std::make_unique<UIBackground>(soundPlayer, texture, rect, backgroundTemplate, barOrientation, barOffset, scale)).get();
 }
 
 UIButton* UIManager::addUIButton(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, sf::Texture* texture, float timeToRelease)
@@ -50,33 +53,33 @@ UIButton* UIManager::addUIButton(std::string ID, sf::RenderWindow* window, sf::F
 
     if (!texture) texture = &uiButtonTexture;
 
-    return (buttons[ID] = std::make_unique<UIButton>(window, texture, rect, sizeIsScale, texCoords, timeToRelease)).get();
+    return (buttons[ID] = std::make_unique<UIButton>(soundPlayer, window, texture, rect, sizeIsScale, texCoords, timeToRelease)).get();
 }
 
 UIDial* UIManager::addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale, sf::Texture* texture)
 {
     if (!texture) texture = &uiDialTexture;
 
-    return (dials[ID] = std::make_unique<UIDial>(window, texture, rect, sizeIsScale, texCoords, minValue, maxValue, valueScale)).get();
+    return (dials[ID] = std::make_unique<UIDial>(soundPlayer, window, texture, rect, sizeIsScale, texCoords, minValue, maxValue, valueScale)).get();
 }
 
 UISlider* UIManager::addUISlider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate, sf::Texture* texture)
 {
     if (!texture) texture = &uiSliderTexture;
 
-    return (sliders[ID] = std::make_unique<UISlider>(window, texture, rect, sizeIsScale, sliderTemplate)).get();
+    return (sliders[ID] = std::make_unique<UISlider>(soundPlayer, window, texture, rect, sizeIsScale, sliderTemplate)).get();
 }
 
 UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string content, bool autoSetHeight, sf::Color color, sf::Font* font)
 {
     if (!font) font = &uiTextFont;
 
-    return (text[ID] = std::make_unique<UIText>(rect, font, content, autoSetHeight, color)).get();
+    return (text[ID] = std::make_unique<UIText>(soundPlayer, rect, font, content, autoSetHeight, color)).get();
 }
 
 UICollider* UIManager::addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical)
 {
-    return (colliders[ID] = std::make_unique<UICollider>(window, rect, vertical)).get();
+    return (colliders[ID] = std::make_unique<UICollider>(soundPlayer, window, rect, vertical)).get();
 }
 
 UIBackground* UIManager::getUIBackground(std::string ID)
@@ -185,6 +188,6 @@ void UIManager::draw(sf::RenderWindow& window)
     for (auto& s : sliders) s.second->draw(window);
     for (auto& c : colliders) c.second->draw(window);
 
-    if (levelIndicator) levelIndicator->draw(window);
+    if (*levelIndicator->valueReadInt != 0) levelIndicator->draw(window);
     if (timeIndicator) timeIndicator->draw(window);
 }

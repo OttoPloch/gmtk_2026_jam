@@ -1,5 +1,4 @@
 #include "level.hpp"
-#include "defaults.hpp"
 #include "launch_pad.hpp"
 #include "ui_manager.hpp"
 
@@ -25,9 +24,7 @@ void Level::setup(std::string startAnimationKey, int animLayer)
 
 void Level::createUI()
 {
-    uiManager->resetUI();
-    uiManager->addUIText("INFO TEXT", {{0, 0}, {300, 1}}, "DEFAULT LEVEL", true, sf::Color::White);
-    uiManager->addUIBackground("BG", {{59, 100}, {100, 100}}, defaultTexCoords.bg, 'l');
+    uiManager->addUIText("TEXT", {{0, 0}, {50, 1}}, "DEFAULT LEVEL", true, sf::Color::White);
 }
 
 void Level::update(float dt, float time)

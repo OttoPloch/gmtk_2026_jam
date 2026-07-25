@@ -9,7 +9,7 @@ class UISlider : public UIElement
 {
 public:
     // baseEmptyPoint and baseFullPoint are percents of the texture rect
-    UISlider(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate);
+    UISlider(SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate);
 
     void update();
 
@@ -34,6 +34,7 @@ private:
     sf::Vector2f baseRightPositionOffset; // right or top
 
     sf::Vector2f scale;
+    sf::Vector2f middleScale;
 
 
     bool grabbed;

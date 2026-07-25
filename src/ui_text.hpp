@@ -7,7 +7,7 @@
 class UIText : public UIElement
 {
 public:
-    UIText(sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight = true, sf::Color color = sf::Color(60, 255, 60));
+    UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight = true, sf::Color color = sf::Color(60, 255, 60));
 
     void update();
 
