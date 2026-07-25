@@ -12,7 +12,7 @@ public:
 
     void update(float dt);
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window) override;
 
     bool isDown();
 private:

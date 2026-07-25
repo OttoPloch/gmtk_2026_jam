@@ -13,19 +13,21 @@ void Level1::createUI()
 {
     uiManager->resetUI();
 
+
+
     sf::Vector2f panel1Pos(10, 20);
 
+    launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
+    UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", 'h', sf::Color::White);
+    
     uiManager->addToGroup("panel1",
     uiManager->addUIBackground("bg", {panel1Pos, {122, 60}}, defaultTexCoords.bgSmall, 'l'));
 
-    launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
-    uiManager->addToGroup("panel1", launchButton);
-
-    UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", true, sf::Color::White);
+    uiManager->addToGroup("panel1",
+    uiManager->addUIBackground("text bg", {text->getRect().position - sf::Vector2f(3, 3), text->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
     uiManager->addToGroup("panel1", text);
 
-    uiManager->addToGroup("panel1",
-        uiManager->addUIBackground("text bg", {text->getRect().position - sf::Vector2f(3, 3), text->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
+    uiManager->addToGroup("panel1", launchButton);
 
     panel1 = uiManager->getGroup("panel1");
 }

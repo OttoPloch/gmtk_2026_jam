@@ -2,11 +2,11 @@
 #include "ui_element.hpp"
 #include <SFML/Graphics/Rect.hpp>
 
-UIText::UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight, sf::Color color) : UIElement(soundPlayer, rect), content(content), text(*font, content, 300)
+UIText::UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, char autoSet, sf::Color color) : UIElement(soundPlayer, rect), content(content), text(*font, content, 300)
 {
     text.setFillColor(color);
 
-    setRect(rect, autoSetHeight);
+    setRect(rect, autoSet);
 
     valueRead = nullptr;
     valueReadInt = nullptr;
@@ -53,13 +53,24 @@ sf::FloatRect UIText::getRect()
     return rect;
 }
 
-void UIText::setRect(sf::FloatRect newRect, bool autoSetHeight)
+void UIText::setString(std::string newContent)
+{
+    content = newContent;
+
+    text.setString(content);
+}
+
+void UIText::setRect(sf::FloatRect newRect, char autoSet)
 {
     rect = newRect;
     
-    if (autoSetHeight)
+    if (autoSet == 'h')
     {
         rect.size.y = rect.size.x / (text.getGlobalBounds().size.x / text.getGlobalBounds().size.y);
+    }
+    else if (autoSet == 'l')
+    {
+        rect.size.x = rect.size.y * (text.getGlobalBounds().size.x / text.getGlobalBounds().size.y);
     }
 
     text.setPosition(rect.position);

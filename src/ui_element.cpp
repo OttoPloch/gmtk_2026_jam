@@ -38,6 +38,11 @@ void UIElement::updateVisuals()
 
 }
 
+void UIElement::draw(sf::RenderWindow& window)
+{
+
+}
+
 sf::Vector2f UIElement::getOffset()
 {
     return offset;

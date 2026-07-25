@@ -70,11 +70,11 @@ UISlider* UIManager::addUISlider(std::string ID, sf::RenderWindow* window, sf::F
     return (sliders[ID] = std::make_unique<UISlider>(soundPlayer, window, texture, rect, sizeIsScale, sliderTemplate)).get();
 }
 
-UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string content, bool autoSetHeight, sf::Color color, sf::Font* font)
+UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string content, char autoSet, sf::Color color, sf::Font* font)
 {
     if (!font) font = &uiTextFont;
 
-    return (text[ID] = std::make_unique<UIText>(soundPlayer, rect, font, content, autoSetHeight, color)).get();
+    return (text[ID] = std::make_unique<UIText>(soundPlayer, rect, font, content, autoSet, color)).get();
 }
 
 UICollider* UIManager::addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical)
@@ -181,11 +181,21 @@ void UIManager::update(float dt)
 
 void UIManager::draw(sf::RenderWindow& window)
 {
-    for (auto& u : backgrounds) u.second->draw(window);
-    for (auto& t : text) t.second->draw(window);
-    for (auto& b : buttons) b.second->draw(window);
-    for (auto& d : dials) d.second->draw(window);
-    for (auto& s : sliders) s.second->draw(window);
+    // for (auto& u : backgrounds) u.second->draw(window);
+    // for (auto& t : text) t.second->draw(window);
+    // for (auto& b : buttons) b.second->draw(window);
+    // for (auto& d : dials) d.second->draw(window);
+    // for (auto& s : sliders) s.second->draw(window);
+    // for (auto& c : colliders) c.second->draw(window);
+
+    for (auto& g : groups)
+    {
+        for (auto& e : g.second)
+        {
+            e->draw(window);
+        }
+    }
+
     for (auto& c : colliders) c.second->draw(window);
 
     if (*levelIndicator->valueReadInt != 0) levelIndicator->draw(window);

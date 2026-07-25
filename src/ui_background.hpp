@@ -9,7 +9,7 @@ class UIBackground : public UIElement
 public:
     UIBackground(SoundPlayer* soundPlayer, sf::Texture* texture, sf::FloatRect rect, BackgroundTemplate backgroundTemplate, char barOrientation = 'n', int barOffset = 5, float scale = 1.f);
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window) override;
 
     void resize(sf::Vector2f newSize);
 

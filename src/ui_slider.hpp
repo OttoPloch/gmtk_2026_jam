@@ -13,7 +13,10 @@ public:
 
     void update();
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window) override;
+
+    // percent
+    float value;
 private:
     void setRect(sf::FloatRect newRect);
 
@@ -41,8 +44,7 @@ private:
     sf::Vector2f grabOffset;
     bool canGrab;
 
-    // percent
-    float value;
-
     SliderTemplate sliderTemplate;
+
+    float lastValue;
 };

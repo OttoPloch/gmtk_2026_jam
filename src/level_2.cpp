@@ -16,20 +16,22 @@ void Level2::createUI()
 {
     uiManager->resetUI();
 
+
+
     sf::Vector2f panel1Pos(10, 20);
+
+    launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
+    UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", 'h', sf::Color::White);
 
     uiManager->addToGroup("panel1",
     uiManager->addUIBackground("bg", {panel1Pos, {122, 60}}, defaultTexCoords.bgSmall, 'l'));
 
-    launchButton = uiManager->addUIButton("launch button", window, {{panel1Pos.x + 42, panel1Pos.y + 28}, {1, 1}}, true, defaultTexCoords.buttonTexCoords);
-    uiManager->addToGroup("panel1", launchButton);
-
-    UIText* text = uiManager->addUIText("text", {{panel1Pos.x + 10, panel1Pos.y + 10}, {100, 1}}, "LAUNCH BUTTON", true, sf::Color::White);
-    uiManager->addToGroup("panel1", text);
-    
     uiManager->addToGroup("panel1",
     uiManager->addUIBackground("text bg", {text->getRect().position - sf::Vector2f(3, 3), text->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
+    uiManager->addToGroup("panel1", text);
     
+    uiManager->addToGroup("panel1", launchButton);
+
     panel1Collider = uiManager->addUICollider("panel1Collider", window, {{0, panel1Pos.y - 15}, {10, 90}}, true);
 
     panel1 = uiManager->getGroup("panel1");
@@ -38,24 +40,23 @@ void Level2::createUI()
 
     sf::Vector2f panel2Pos(160, 10);
     
+    powerDial = uiManager->addUIDial("power dial", window, {{panel2Pos.x + 10, panel2Pos.y + 21}, {50, 50}}, false, defaultTexCoords.dialTexCoords, -0, 100, 100./360/3);
+    UIText* text3 = uiManager->addUIText("z power text", {{panel2Pos.x + 27.5f, panel2Pos.y + 79}, {15, 100}}, "100%");
+    UIText* text4 = uiManager->addUIText("power text", {{panel2Pos.x + 9, panel2Pos.y + 11}, {50, 100}}, "LAUNCH POWER", 'h', sf::Color::White);
+    
     uiManager->addToGroup("panel2",
     uiManager->addUIBackground("bg2", {panel2Pos, {70, 95}}, defaultTexCoords.bgSmall, 't'));
-    
-    powerDial = uiManager->addUIDial("power dial", window, {{panel2Pos.x + 10, panel2Pos.y + 21}, {50, 50}}, false, defaultTexCoords.dialTexCoords, -0, 100, 100./360/3);
-    uiManager->addToGroup("panel2", powerDial);
-    
-    UIText* text3 = uiManager->addUIText("z power text", {{panel2Pos.x + 27.5f, panel2Pos.y + 79}, {15, 100}}, "100%");
-    uiManager->addToGroup("panel2", text3);
-    
-    uiManager->addToGroup("panel2",
-    uiManager->addUIBackground("text3 bg", {text3->getRect().position - sf::Vector2f(3, 3), text3->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
-    
-    UIText* text4 = uiManager->addUIText("power text", {{panel2Pos.x + 9, panel2Pos.y + 11}, {50, 100}}, "LAUNCH POWER", true, sf::Color::White);
-    uiManager->addToGroup("panel2", text4);
-    
+
     uiManager->addToGroup("panel2",
     uiManager->addUIBackground("text4 bg", {text4->getRect().position - sf::Vector2f(3, 3), text4->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
-             
+    uiManager->addToGroup("panel2", text4);
+
+    uiManager->addToGroup("panel2",
+    uiManager->addUIBackground("text3 bg", {text3->getRect().position - sf::Vector2f(3, 3), text3->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
+    uiManager->addToGroup("panel2", text3);
+
+    uiManager->addToGroup("panel2", powerDial);
+
     panel2Collider = uiManager->addUICollider("panel2Collider", window, {{panel2Pos.x - 15, 0}, {100, 10}}, false);
 
     text3->valueRead = &powerLevel;

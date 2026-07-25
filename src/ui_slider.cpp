@@ -1,8 +1,7 @@
 #include "ui_slider.hpp"
 #include "utils.hpp"
 #include <SFML/Window/Mouse.hpp>
-
-#include <iostream>
+#include "sound_player.hpp"
 
 UISlider::UISlider(
     SoundPlayer* soundPlayer, 
@@ -25,6 +24,7 @@ UISlider::UISlider(
     handle.setOrigin(sliderTemplate.handleOrigin);
 
     value = 0;
+    lastValue = 0;
 
     setRect(rect);
 
@@ -72,7 +72,7 @@ void UISlider::update()
 
             if (sliderTemplate.vertical)
             {
-                handle.setPosition({handlePos.x, mousePos.y - grabOffset.y});
+                handle.setPosition({handlePos.x, std::round(mousePos.y - grabOffset.y)});
 
                 if (handle.getPosition().y > empty.y) handle.setPosition({handlePos.x, empty.y});
                 if (handle.getPosition().y < full.y) handle.setPosition({handlePos.x, full.y});
@@ -81,17 +81,22 @@ void UISlider::update()
             }
             else
             {
-                handle.setPosition({mousePos.x - grabOffset.x, handlePos.y});
+                handle.setPosition({std::round(mousePos.x - grabOffset.x), handlePos.y});
                 
                 if (handle.getPosition().x < empty.x) handle.setPosition({empty.x, handlePos.y});
                 if (handle.getPosition().x > full.x) handle.setPosition({full.x, handlePos.y});
                 
                 value = (handle.getPosition().x - empty.x) / diff;
             }
+
+            if (std::abs(lastValue - value) >= .15f)
+            {
+                soundPlayer->play("slider");
+
+                lastValue = value;
+            }
         }
     }
-
-    std::cout << value << '\n';
 }
 
 void UISlider::draw(sf::RenderWindow& window)
@@ -124,8 +129,8 @@ void UISlider::setRect(sf::FloatRect newRect)
     baseRightPositionOffset = {baseRightPositionOffset.x * middleScale.x, baseRightPositionOffset.y * middleScale.y};
     baseRightPositionOffset += baseMiddlePositionOffset;
 
-    empty = {rect.position.x + sliderTemplate.baseTexCoords[0].size.x * sliderTemplate.emptyPoint.x * scale.x, std::round(rect.position.y + sliderTemplate.baseTexCoords[0].size.y * sliderTemplate.emptyPoint.y * scale.y)};
-    full = {rect.position.x + baseRightPositionOffset.x + sliderTemplate.baseTexCoords[2].size.x * sliderTemplate.fullPoint.x * scale.x, std::round(rect.position.y + baseRightPositionOffset.y + sliderTemplate.baseTexCoords[2].size.y * sliderTemplate.fullPoint.y * scale.y)};
+    empty = {rect.position.x + sliderTemplate.baseTexCoords[0].size.x * sliderTemplate.emptyPoint.x * scale.x, rect.position.y + sliderTemplate.baseTexCoords[0].size.y * sliderTemplate.emptyPoint.y * scale.y};
+    full = {rect.position.x + baseRightPositionOffset.x + sliderTemplate.baseTexCoords[2].size.x * sliderTemplate.fullPoint.x * scale.x, rect.position.y + baseRightPositionOffset.y + sliderTemplate.baseTexCoords[2].size.y * sliderTemplate.fullPoint.y * scale.y};
     
     if (sliderTemplate.vertical)
     {
@@ -143,11 +148,11 @@ void UISlider::setRect(sf::FloatRect newRect)
     sf::Vector2f handlePos = handle.getPosition();
     if (sliderTemplate.vertical)
     {
-        handle.setPosition({empty.x, empty.y + diff * value});
+        handle.setPosition({empty.x, std::round(empty.y + diff * value)});
     }
     else
     {
-        handle.setPosition({empty.x + diff * value, empty.y});
+        handle.setPosition({std::round(empty.x + diff * value), empty.y});
     }
     
     baseLeft.setPosition(rect.position);

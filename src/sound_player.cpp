@@ -9,7 +9,8 @@ SoundPlayer::SoundPlayer()
         {"dial spin", sf::SoundBuffer("assets/sounds/zipclick.flac")},
         {"launch", sf::SoundBuffer("assets/sounds/launch modified.mp3")},
         {"pop", sf::SoundBuffer("assets/sounds/744144__nomentero__bubble-pop-6.wav")},
-        {"tick", sf::SoundBuffer("assets/sounds/short tick.mp3")}
+        {"tick", sf::SoundBuffer("assets/sounds/short tick.mp3")},
+        {"slider", sf::SoundBuffer("assets/sounds/506054__mellau__button-click-1.wav")}
     };
 
     tickPlayer = std::make_unique<sf::Sound>(sounds["tick"]);

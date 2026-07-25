@@ -55,6 +55,8 @@ void LaunchPad::reset()
 
 void LaunchPad::launch()
 {
+    if (failing) return;
+
     soundPlayer->play("launch");
 
     launching = true;

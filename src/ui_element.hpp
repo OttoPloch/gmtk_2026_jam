@@ -22,6 +22,8 @@ public:
 
     virtual void updateVisuals();
 
+    virtual void draw(sf::RenderWindow& window);
+
     sf::Vector2f getOffset();
 protected:
     SoundPlayer* soundPlayer;

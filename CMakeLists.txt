@@ -33,6 +33,9 @@ src/ui_collider.cpp
 src/level_2.cpp
 src/sound_player.cpp
 src/level_0.cpp
+src/level_3.cpp
+src/level_4.cpp
+src/level_5.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)

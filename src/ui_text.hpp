@@ -7,11 +7,11 @@
 class UIText : public UIElement
 {
 public:
-    UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight = true, sf::Color color = sf::Color(60, 255, 60));
+    UIText(SoundPlayer* soundPlayer, sf::FloatRect rect, sf::Font* font, std::string content, char autoSet = 'h', sf::Color color = sf::Color(60, 255, 60));
 
     void update();
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window) override;
 
     sf::FloatRect getRect();
 
@@ -20,10 +20,12 @@ public:
     bool valueInDegrees;
     bool valueInPercent;
     int valueDecimals;
-private:
-    void setRect(sf::FloatRect newRect, bool autoSetHeight = true);
 
-    void updateVisuals();
+    void setString(std::string newContent);
+private:
+    void setRect(sf::FloatRect newRect, char autoSet = 'h');
+
+    void updateVisuals() override;
 
     std::string content;
 

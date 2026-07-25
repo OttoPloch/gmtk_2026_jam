@@ -9,6 +9,8 @@ Level::Level(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManage
 
 void Level::setup(std::string startAnimationKey, int animLayer)
 {
+    launchPad->soundPlayer->tickPlayer->stop();
+
     animations.clear();
     
     if (startAnimationKey != "none")
@@ -25,7 +27,7 @@ void Level::setup(std::string startAnimationKey, int animLayer)
 
 void Level::createUI()
 {
-    uiManager->addUIText("TEXT", {{0, 0}, {50, 1}}, "DEFAULT LEVEL", true, sf::Color::White);
+    uiManager->addUIText("TEXT", {{0, 0}, {50, 1}}, "DEFAULT LEVEL", 'h', sf::Color::White);
 }
 
 void Level::update(float dt, float time)
@@ -58,6 +60,17 @@ void Level::specificUpdate(float dt, float time)
 
 void Level::beginAnimation(std::string key, int layer)
 {
+    if (layer == 0)
+    {
+        for (auto& l : animations)
+        {
+            if (l.first != 0)
+            {
+                l.second.clear();
+            }
+        }
+    }
+
     animations[layer].emplace_back(key, 0);
 }
 

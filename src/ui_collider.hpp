@@ -12,7 +12,7 @@ public:
 
     void update();
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window) override;
 private:
     void updateVisuals() override;
 
