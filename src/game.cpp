@@ -14,6 +14,7 @@
 #include "level_3.hpp"
 #include "level_4.hpp"
 #include "level_5.hpp"
+#include "level_6.hpp"
 
 Game::Game() {}
 
@@ -32,8 +33,9 @@ void Game::start()
     levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 30));
     levels.emplace_back(std::make_unique<Level3>(&window.window, &launchPad, &uiManager, 25));
     levels.emplace_back(std::make_unique<Level4>(&window.window, &launchPad, &uiManager, 15));
-    levels.emplace_back(std::make_unique<Level5>(&window.window, &launchPad, &uiManager, 12));
-    currLevel = 4;
+    levels.emplace_back(std::make_unique<Level5>(&window.window, &launchPad, &uiManager, 20));
+    levels.emplace_back(std::make_unique<Level6>(&window.window, &launchPad, &uiManager, 30));
+    currLevel = 6;
 
     levels[currLevel]->setup();
 

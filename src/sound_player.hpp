@@ -19,5 +19,5 @@ public:
 private:
     std::map<std::string, sf::SoundBuffer> sounds;
 
-    std::vector<std::unique_ptr<sf::Sound>> players;
+    std::vector<std::pair<std::string, std::unique_ptr<sf::Sound>>> players;
 };

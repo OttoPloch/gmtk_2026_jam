@@ -36,6 +36,7 @@ src/level_0.cpp
 src/level_3.cpp
 src/level_4.cpp
 src/level_5.cpp
+src/level_6.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)

@@ -9,16 +9,14 @@
 
 Level4::Level4() {}
 
-Level4::Level4(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete),
-powerLevel(0),
-engine1Calibration(-32),
-engine2Calibration(47)
-{}
+Level4::Level4(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete) {}
 
 void Level4::createUI()
 {
-    engine1Calibration = -32;
-    engine2Calibration = 47;
+    powerLevel = 0;
+
+    engine1Calibration = launchPad->random->getRandInt(-100, 100);
+    engine2Calibration = launchPad->random->getRandInt(-100, 100);
 
     oxidizer = launchPad->random->getRandInt(0, 1);
     fuel = launchPad->random->getRandInt(0, 1);

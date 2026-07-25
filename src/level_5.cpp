@@ -9,11 +9,12 @@
 
 Level5::Level5() {}
 
-Level5::Level5(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete)
-{}
+Level5::Level5(sf::RenderWindow* window, LaunchPad* launchPad, UIManager* uiManager, float timeToComplete) : Level(window, launchPad, uiManager, timeToComplete) {}
 
 void Level5::createUI()
 {
+    powerLevel = 0;
+
     engine1Calibration = launchPad->random->getRandInt(-100, 100);
     engine2Calibration = launchPad->random->getRandInt(-100, 100);
 
@@ -174,25 +175,30 @@ void Level5::createUI()
     uiManager->defaultGroup = "panel4";
 
     angleDial = uiManager->addUIDial("angle dial", window, {{panel4Pos.x + 10, panel4Pos.y + 10}, {1, 1}}, true, defaultTexCoords.dialSmallTexCoords, -180, 0);
-    UIText* angleText = uiManager->addUIText("angle text", {{panel4Pos.x + 13, panel4Pos.y + 34}, {10, 1}}, "-45°");
+    UIText* angleText = uiManager->addUIText("angle text", {{panel4Pos.x + 11, panel4Pos.y + 34}, {0, 4}}, "-45°", 'l');
+    UIText* angleLabel = uiManager->addUIText("angle label", {{panel4Pos.x + 34, panel4Pos.y + 15}, {0, 9}}, "LAUNCH\nANGLE", 'l', sf::Color::White);
 
 
     uiManager->addToGroup("panel4",
-    uiManager->addUIBackground("panel3 bg", {panel4Pos, {50, 80}}, defaultTexCoords.bgSmall, 't'));
+    uiManager->addUIBackground("panel3 bg", {panel4Pos, {73, 54}}, defaultTexCoords.bgSmall, 't'));
 
     uiManager->addToGroup("panel4", angleDial);
+    uiManager->addToGroup("panel4",
+    uiManager->addUIBackground("angle label bg", {angleLabel->getRect().position - sf::Vector2f(3, 3), angleLabel->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
+    uiManager->addToGroup("panel4",
+    angleLabel);
     uiManager->addToGroup("panel4",
     uiManager->addUIBackground("angle text bg", {angleText->getRect().position - sf::Vector2f(3, 3), angleText->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
     uiManager->addToGroup("panel4", angleText);
 
     uiManager->defaultGroup = "LEVEL";
-    panel4Collider = uiManager->addUICollider("panel4Collider", window, {{panel4Pos.x - 15, 0}, {80, 10}}, false);
+    panel4Collider = uiManager->addUICollider("panel4Collider", window, {{panel4Pos.x - 15, 0}, {103, 10}}, false);
 
     angleText->valueRead = &launchAngle;
     angleText->valueDecimals = 0;
     angleText->valueInDegrees = true;
     
-    angleDial->setValue((launchAngle - 45) * 4);
+    angleDial->setValue((launchAngle - 45) * 2);
 
     panel4 = uiManager->getGroup("panel4");
 
@@ -662,7 +668,8 @@ void Level5::specificUpdate(float dt, float time)
         if (powerLevel >= 100 &&
             engine1Calibration >= 60 && engine1Calibration <= 80 &&
             engine2Calibration >= -20 && engine2Calibration <= 0 &&
-            oxidizer && fuel && !bomb && pumps
+            oxidizer && fuel && !bomb && pumps &&
+            launchAngle >= 25 && launchAngle <= 35
         )
         {
             launchPad->launch();

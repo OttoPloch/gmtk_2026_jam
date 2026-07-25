@@ -20,15 +20,28 @@ void SoundPlayer::play(std::string soundName)
 {
     if (sounds.find(soundName) != sounds.end())
     {
-        auto& p = players.emplace_back(std::make_unique<sf::Sound>(sounds[soundName]));
+        auto& p = players.emplace_back(soundName, std::make_unique<sf::Sound>(sounds[soundName]));
 
-        p->play();
+        p.second->play();
     }
 }
 
 void SoundPlayer::stopAll()
 {
-    players.clear();
+    std::vector<int> playersToRemove;
+
+    for (int i = 0; i < players.size(); i++)
+    {
+        if (players[i].first != "level finish")
+        {
+            playersToRemove.emplace_back(i);
+        }
+    }
+
+    for (auto& i : playersToRemove)
+    {
+        players.erase(players.begin() + i);
+    }
 
     if (tickPlayer) tickPlayer->stop();
 }
@@ -39,7 +52,7 @@ void SoundPlayer::update()
 
     for (int i = 0; i < players.size(); i++)
     {
-        if (players[i]->getStatus() == sf::Sound::Status::Stopped)
+        if (players[i].second->getStatus() == sf::Sound::Status::Stopped)
         {
             playersToRemove.emplace_back(i);
         }
