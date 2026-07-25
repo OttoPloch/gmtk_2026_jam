@@ -3,8 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include "defaults.hpp"
+#include "ui_element.hpp"
 
-class UISlider
+class UISlider : public UIElement
 {
 public:
     // baseEmptyPoint and baseFullPoint are percents of the texture rect
@@ -14,17 +15,16 @@ public:
 
     void draw(sf::RenderWindow& window);
 private:
+    void setRect(sf::FloatRect newRect);
+
+    void updateVisuals() override;
+
     sf::RenderWindow* window;
 
     sf::Sprite handle;
     sf::Sprite baseLeft; // left or bottom
     sf::Sprite baseMiddle;
     sf::Sprite baseRight; // right or top
-
-    sf::FloatRect rect;
-
-    sf::IntRect handleTexCoords;
-    std::array<sf::IntRect, 3> baseTexCoords;
 
     sf::Vector2f empty;
     sf::Vector2f full;
@@ -35,8 +35,6 @@ private:
 
     sf::Vector2f scale;
 
-    bool vertical; // false = horizontal
-
 
     bool grabbed;
     sf::Vector2f grabOffset;
@@ -44,4 +42,6 @@ private:
 
     // percent
     float value;
+
+    SliderTemplate sliderTemplate;
 };

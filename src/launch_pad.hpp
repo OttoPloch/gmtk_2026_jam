@@ -47,4 +47,7 @@ private:
     std::vector<Particle> particles_middle;
     std::vector<Particle> particles_infront;
     sf::Texture particleTexture;
+
+    int particlesPerSecond;
+    float particlesToMake;
 };

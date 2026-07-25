@@ -1,8 +1,8 @@
 #include "ui_text.hpp"
+#include "ui_element.hpp"
 #include <SFML/Graphics/Rect.hpp>
-#include <iostream>
 
-UIText::UIText(sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight, sf::Color color) : rect(rect), content(content), text(*font, content, 300)
+UIText::UIText(sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight, sf::Color color) : UIElement(rect), content(content), text(*font, content, 300)
 {
     text.setFillColor(color);
 
@@ -28,8 +28,6 @@ void UIText::update()
         if (valueInDegrees) content += "°";
 
         text.setString(content);
-
-        // fitRect();
     }
 }
 
@@ -58,16 +56,7 @@ void UIText::setRect(sf::FloatRect newRect, bool autoSetHeight)
     text.setOrigin(text.getLocalBounds().position);
 }
 
-void UIText::fitRect()
+void UIText::updateVisuals()
 {
-    std::cout << "//\n";
-    std::cout << text.getGlobalBounds().size.x << ", " << text.getGlobalBounds().size.y << '\n';
-    std::cout << rect.size.x << ", " << rect.size.y << '\n';
-
-    sf::Vector2f center = {rect.position.x + rect.size.x / 2.f, rect.position.y + rect.size.y / 2.f};
-
-    rect.size = {100, 1};
-    rect.position = {center.x - rect.size.x / 2.f, center.y};
-
-    setRect(rect);
+    text.setPosition(rect.position);
 }

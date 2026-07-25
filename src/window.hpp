@@ -10,7 +10,7 @@ public:
 
     Window(sf::Vector2f backgroundSize);
 
-    void create(sf::VideoMode videoMode, std::uint32_t style = sf::Style::Close);
+    void create(sf::VideoMode videoMode, std::uint32_t style = sf::Style::Close, unsigned int maxFramerate = 60);
 
     void create(sf::VideoMode videoMode, sf::State state, std::uint32_t style = sf::Style::Close);
 

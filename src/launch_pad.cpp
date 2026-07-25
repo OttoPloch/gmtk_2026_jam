@@ -22,6 +22,8 @@ rocketSpeed(rocketStartSpeed)
     {
         std::cout << "ERROR loading particle texture.\n";
     }
+
+    reset();
 }
 
 void LaunchPad::reset()
@@ -30,6 +32,13 @@ void LaunchPad::reset()
     
     launching = false;
     rocketSpeed = rocketStartSpeed;
+
+    particlesPerSecond = 60;
+    particlesToMake = 0;
+
+    particles_behind.clear();
+    particles_middle.clear();
+    particles_infront.clear();
 }
 
 void LaunchPad::launch()
@@ -41,7 +50,14 @@ void LaunchPad::update(float dt, float time)
 {
     if (launching)
     {
-        addParticle(time);
+        particlesToMake += dt * particlesPerSecond;
+
+        while (particlesToMake >= 1)
+        {
+            addParticle(time);
+
+            particlesToMake -= 1;
+        }
 
         rocketSpeed *= std::pow(rocketSpeedMultiplier, dt);
 

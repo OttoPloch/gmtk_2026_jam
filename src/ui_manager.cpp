@@ -1,7 +1,9 @@
 #include "ui_manager.hpp"
+#include "ui_collider.hpp"
 #include "ui_dial.hpp"
 #include <SFML/Graphics/Rect.hpp>
 #include <iostream>
+#include <algorithm>
 
 UIManager::UIManager()
 {
@@ -72,6 +74,11 @@ UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string con
     return (text[ID] = std::make_unique<UIText>(rect, font, content, autoSetHeight, color)).get();
 }
 
+UICollider* UIManager::addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical)
+{
+    return (colliders[ID] = std::make_unique<UICollider>(window, rect, vertical)).get();
+}
+
 UIBackground* UIManager::getUIBackground(std::string ID)
 {
     if (backgrounds.find(ID) != backgrounds.end()) return backgrounds[ID].get();
@@ -107,9 +114,42 @@ UIText* UIManager::getUIText(std::string ID)
     return nullptr;
 }
 
-
-void UIManager::clearUI()
+UICollider* UIManager::getUICollider(std::string ID)
 {
+    if (colliders.find(ID) != colliders.end()) return colliders[ID].get();
+    std::cout << "ERROR getting UICollider with ID '" << ID << "'\n";
+    return nullptr;
+}
+
+void UIManager::addToGroup(std::string groupID, UIElement* element)
+{
+    if (element)
+    {
+        if (std::find(groups[groupID].begin(), groups[groupID].end(), element) == groups[groupID].end())
+        {
+            groups[groupID].emplace_back(element);
+        }
+        else
+        {
+            std::cout << "ERROR adding element to group with groupID '" << groupID << "'. Element pointer already in group.\n";
+        }
+    }
+}
+
+std::vector<UIElement*>* UIManager::getGroup(std::string groupID)
+{
+    if (groups.find(groupID) != groups.end())
+    {
+        return &groups[groupID];
+    }
+
+    std::cout << "ERROR getting group with groupID '" << groupID << "'. Group not found.\n";
+    return nullptr;
+}
+
+void UIManager::resetUI()
+{
+    groups.clear();
     backgrounds.clear();
     buttons.clear();
     dials.clear();
@@ -122,6 +162,7 @@ void UIManager::update(float dt)
     for (auto& d : dials) d.second->update();
     for (auto& s : sliders) s.second->update();
     for (auto& t : text) t.second->update();
+    for (auto& c : colliders) c.second->update();
 }
 
 void UIManager::draw(sf::RenderWindow& window)
@@ -131,4 +172,5 @@ void UIManager::draw(sf::RenderWindow& window)
     for (auto& b : buttons) b.second->draw(window);
     for (auto& d : dials) d.second->draw(window);
     for (auto& s : sliders) s.second->draw(window);
+    for (auto& c : colliders) c.second->draw(window);
 }

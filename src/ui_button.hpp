@@ -3,8 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "ui_element.hpp"
 
-class UIButton
+class UIButton : public UIElement
 {
 public:
     UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease = 1.f);
@@ -20,10 +21,11 @@ private:
     
     void setTexCoords(sf::IntRect newTexCoords);
 
+    void updateVisuals() override;
+
     sf::RenderWindow* window;
 
     sf::Sprite button;
-    sf::FloatRect rect;
     std::array<sf::IntRect, 3> texCoords;
 
     float timeToRelease;

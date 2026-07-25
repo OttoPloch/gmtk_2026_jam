@@ -28,6 +28,8 @@ src/ui_slider.cpp
 src/level.cpp
 src/ui_text.cpp
 src/levels.cpp
+src/ui_element.cpp
+src/ui_collider.cpp
 )
 
 target_compile_features(app PRIVATE cxx_std_17)

@@ -3,8 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <vector>
+#include "ui_element.hpp"
 
-class UIDial
+class UIDial : public UIElement
 {
 public:
     UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1);
@@ -23,11 +24,11 @@ private:
 
     int getMouseAngle();
 
+    void updateVisuals() override;
+
     sf::RenderWindow* window;
 
     sf::Sprite dial;
-
-    sf::FloatRect rect;
 
     std::vector<sf::IntRect> texCoords;
 

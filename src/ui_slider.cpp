@@ -7,54 +7,30 @@ UISlider::UISlider(
     sf::Texture* texture,
     sf::FloatRect rect, bool sizeIsScale,
     SliderTemplate sliderTemplate
-) : window(window), handle(*texture), baseLeft(*texture), baseMiddle(*texture), baseRight(*texture), rect(rect), handleTexCoords(sliderTemplate.handleTexCoords), baseTexCoords(sliderTemplate.baseTexCoords), vertical(sliderTemplate.vertical)
+) : UIElement(rect), window(window), handle(*texture), baseLeft(*texture), baseMiddle(*texture), baseRight(*texture), sliderTemplate(sliderTemplate)
 {
     if (sizeIsScale) rect.size = {
-        (baseTexCoords[0].size.x + baseTexCoords[1].size.x + baseTexCoords[2].size.x) * rect.size.x,
-        (baseTexCoords[0].size.y + baseTexCoords[1].size.y + baseTexCoords[2].size.y) * rect.size.y
+        (sliderTemplate.baseTexCoords[0].size.x + sliderTemplate.baseTexCoords[1].size.x + sliderTemplate.baseTexCoords[2].size.x) * rect.size.x,
+        (sliderTemplate.baseTexCoords[0].size.y + sliderTemplate.baseTexCoords[1].size.y + sliderTemplate.baseTexCoords[2].size.y) * rect.size.y
     };
 
-    handle.setTextureRect(handleTexCoords);
-    baseLeft.setTextureRect(baseTexCoords[0]);
-    baseMiddle.setTextureRect(baseTexCoords[1]);
-    baseRight.setTextureRect(baseTexCoords[2]);
+    handle.setTextureRect(sliderTemplate.handleTexCoords);
+    baseLeft.setTextureRect(sliderTemplate.baseTexCoords[0]);
+    baseMiddle.setTextureRect(sliderTemplate.baseTexCoords[1]);
+    baseRight.setTextureRect(sliderTemplate.baseTexCoords[2]);
     
     handle.setOrigin(sliderTemplate.handleOrigin);
 
     scale = {
-        rect.size.x / (baseTexCoords[0].size.x + baseTexCoords[1].size.x + baseTexCoords[2].size.x),
-        rect.size.y / (baseTexCoords[0].size.y + baseTexCoords[1].size.y + baseTexCoords[2].size.y)
+        rect.size.x / (sliderTemplate.baseTexCoords[0].size.x + sliderTemplate.baseTexCoords[1].size.x + sliderTemplate.baseTexCoords[2].size.x),
+        rect.size.y / (sliderTemplate.baseTexCoords[0].size.y + sliderTemplate.baseTexCoords[1].size.y + sliderTemplate.baseTexCoords[2].size.y)
     };
     handle.setScale(scale);
     baseLeft.setScale(scale);
     baseMiddle.setScale(scale);
     baseRight.setScale(scale);
 
-    baseMiddlePositionOffset = static_cast<sf::Vector2f>(baseTexCoords[1].position - baseTexCoords[0].position);
-    baseMiddlePositionOffset = {baseMiddlePositionOffset.x * scale.x, baseMiddlePositionOffset.y * scale.y};
-    baseRightPositionOffset = static_cast<sf::Vector2f>(baseTexCoords[2].position - baseTexCoords[0].position);
-    baseRightPositionOffset = {baseRightPositionOffset.x * scale.x, baseRightPositionOffset.y * scale.y};
-
-    empty = {std::round(rect.position.x + baseTexCoords[0].size.x * sliderTemplate.emptyPoint.x * scale.x), std::round(rect.position.y + baseTexCoords[0].size.y * sliderTemplate.emptyPoint.y * scale.y)};
-    full = {std::round(rect.position.x + baseRightPositionOffset.x + baseTexCoords[2].size.x * sliderTemplate.fullPoint.x * scale.x), std::round(rect.position.y + baseRightPositionOffset.y + baseTexCoords[2].size.y * sliderTemplate.fullPoint.y * scale.y)};
-    
-    if (vertical)
-    {
-        sf::Vector2f temp = empty;
-        empty = full;
-        full = temp;
-
-        diff = full.y - empty.y;
-    }
-    else
-    {
-        diff = full.x - empty.x;
-    }
-
-    handle.setPosition(empty);
-    baseLeft.setPosition(rect.position);
-    baseMiddle.setPosition(rect.position + baseMiddlePositionOffset);
-    baseRight.setPosition(rect.position + baseRightPositionOffset);
+    setRect(rect);
 
     grabbed = false;
 
@@ -100,7 +76,7 @@ void UISlider::update()
         {
             sf::Vector2f handlePos = handle.getPosition();
 
-            if (vertical)
+            if (sliderTemplate.vertical)
             {
                 handle.setPosition({handlePos.x, mousePos.y - grabOffset.y});
 
@@ -128,4 +104,40 @@ void UISlider::draw(sf::RenderWindow& window)
     window.draw(baseMiddle);
     window.draw(baseRight);
     window.draw(handle);
+}
+
+void UISlider::setRect(sf::FloatRect newRect)
+{
+    rect = newRect;
+
+    baseMiddlePositionOffset = static_cast<sf::Vector2f>(sliderTemplate.baseTexCoords[1].position - sliderTemplate.baseTexCoords[0].position);
+    baseMiddlePositionOffset = {baseMiddlePositionOffset.x * scale.x, baseMiddlePositionOffset.y * scale.y};
+    baseRightPositionOffset = static_cast<sf::Vector2f>(sliderTemplate.baseTexCoords[2].position - sliderTemplate.baseTexCoords[0].position);
+    baseRightPositionOffset = {baseRightPositionOffset.x * scale.x, baseRightPositionOffset.y * scale.y};
+
+    empty = {rect.position.x + sliderTemplate.baseTexCoords[0].size.x * sliderTemplate.emptyPoint.x * scale.x, std::round(rect.position.y + sliderTemplate.baseTexCoords[0].size.y * sliderTemplate.emptyPoint.y * scale.y)};
+    full = {rect.position.x + baseRightPositionOffset.x + sliderTemplate.baseTexCoords[2].size.x * sliderTemplate.fullPoint.x * scale.x, std::round(rect.position.y + baseRightPositionOffset.y + sliderTemplate.baseTexCoords[2].size.y * sliderTemplate.fullPoint.y * scale.y)};
+    
+    if (sliderTemplate.vertical)
+    {
+        sf::Vector2f temp = empty;
+        empty = full;
+        full = temp;
+
+        diff = full.y - empty.y;
+    }
+    else
+    {
+        diff = full.x - empty.x;
+    }
+
+    handle.setPosition(empty);
+    baseLeft.setPosition(rect.position);
+    baseMiddle.setPosition(rect.position + baseMiddlePositionOffset);
+    baseRight.setPosition(rect.position + baseRightPositionOffset);
+}
+
+void UISlider::updateVisuals()
+{
+    setRect(rect);
 }

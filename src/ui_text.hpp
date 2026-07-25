@@ -2,8 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
+#include "ui_element.hpp"
 
-class UIText
+class UIText : public UIElement
 {
 public:
     UIText(sf::FloatRect rect, sf::Font* font, std::string content, bool autoSetHeight = true, sf::Color color = sf::Color(60, 255, 60));
@@ -20,9 +21,8 @@ public:
 private:
     void setRect(sf::FloatRect newRect, bool autoSetHeight = true);
 
-    void fitRect();
+    void updateVisuals();
 
-    sf::FloatRect rect;
     std::string content;
 
     sf::Text text;

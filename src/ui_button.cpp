@@ -3,9 +3,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-#include <iostream>
-
-UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : window(window), button(*texture), rect(rect), texCoords(texCoords), timeToRelease(timeToRelease)
+UIButton::UIButton(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::array<sf::IntRect, 3> texCoords, float timeToRelease) : UIElement(rect), window(window), button(*texture), texCoords(texCoords), timeToRelease(timeToRelease)
 {
     timeSincePressed = timeToRelease;
 
@@ -86,4 +84,9 @@ void UIButton::setRect(sf::FloatRect newRect)
 void UIButton::setTexCoords(sf::IntRect newTexCoords)
 {
     setRect(rect, newTexCoords);
+}
+
+void UIButton::updateVisuals()
+{
+    setRect(rect, button.getTextureRect());
 }

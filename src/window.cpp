@@ -6,10 +6,10 @@ Window::Window() : windowState(sf::State::Windowed), windowedResolution(1440, 81
 
 Window::Window(sf::Vector2f backgroundSize) : windowState(sf::State::Windowed), windowedResolution(1440, 810), backgroundSize(backgroundSize) {}
 
-void Window::create(sf::VideoMode videoMode, std::uint32_t style)
+void Window::create(sf::VideoMode videoMode, std::uint32_t style, unsigned int maxFramerate)
 {
     window.create(videoMode, "COUNT DOWN", style, windowState);
-    window.setFramerateLimit(60);
+    if (maxFramerate != 0) window.setFramerateLimit(maxFramerate);
 
     window.setView(sf::View(sf::FloatRect({0, 0}, backgroundSize)));
 }

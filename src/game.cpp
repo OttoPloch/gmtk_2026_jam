@@ -11,16 +11,15 @@ Game::Game() {}
 void Game::start()
 {
     window = Window(static_cast<sf::Vector2f>(launchPad.getBackgroundSize()));
-    window.create(sf::VideoMode(window.windowedResolution), sf::Style::Close);
+    window.create(sf::VideoMode(window.windowedResolution), sf::Style::Close, 60);
 
-    launchPad.reset();
     launchPad.random = &random;
 
     levels.emplace_back(std::make_unique<Level>(&window.window, &launchPad, &uiManager));
     levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager));
     currLevel = 1;
 
-    levels[currLevel]->setup();
+    levels[currLevel]->setup("hide all", 0);
 
     run();
 }
@@ -98,7 +97,7 @@ void Game::events()
             }
             else if (keyPressed->code == sf::Keyboard::Key::R)
             {
-                launchPad.reset();
+                levels[currLevel]->setup("hide all", 0);
             }
             else if (keyPressed->code == sf::Keyboard::Key::F11)
             {
@@ -112,10 +111,6 @@ void Game::events()
             {
                 levels[currLevel]->setup();
             }
-            else if (keyPressed->code == sf::Keyboard::Key::X)
-            {
-                uiManager.clearUI();
-            }
         }
     }
 }
@@ -126,7 +121,7 @@ void Game::update()
 
     uiManager.update(dt);
 
-    levels[currLevel]->update();
+    levels[currLevel]->update(dt, gameClock.getElapsedTime().asSeconds());
 }
 
 void Game::draw()

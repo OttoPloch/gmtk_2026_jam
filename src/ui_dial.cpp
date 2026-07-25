@@ -3,7 +3,7 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-UIDial::UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : window(window), dial(*texture), rect(rect), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
+UIDial::UIDial(sf::RenderWindow* window, sf::Texture* texture, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale) : UIElement(rect), window(window), dial(*texture), texCoords(texCoords), minValue(minValue), maxValue(maxValue), valueScale(valueScale)
 {
     if (sizeIsScale) rect.size = {texCoords[0].size.x * rect.size.x, texCoords[0].size.y * rect.size.y};
 
@@ -101,4 +101,9 @@ int UIDial::getMouseAngle()
     if (angle < 0) angle = 360 + angle;
 
     return angle;
+}
+
+void UIDial::updateVisuals()
+{
+    setRect(rect);
 }
