@@ -1,7 +1,7 @@
 #include "ui_collider.hpp"
 #include "utils.hpp"
 
-UICollider::UICollider(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::FloatRect rect, bool vertical) : UIElement(group, uiManager, soundPlayer, rect), window(window), vertical(vertical)
+UICollider::UICollider(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::FloatRect rect, bool vertical, bool setHeightManually) : UIElement(group, uiManager, soundPlayer, rect), window(window), vertical(vertical)
 {
     collides = false;
     collidedLastFrame = false;
@@ -9,8 +9,15 @@ UICollider::UICollider(std::string group, UIManager* uiManager, SoundPlayer* sou
     indicator.setFillColor(sf::Color(25, 25, 25, 200));
     indicator.setPosition(rect.position);
     
-    if (vertical) indicator.setSize({5, rect.size.y});
-    else indicator.setSize({rect.size.x, 5});
+    if (!setHeightManually)
+    {
+        if (vertical) indicator.setSize({5, rect.size.y});
+        else indicator.setSize({rect.size.x, 5});
+    }
+    else
+    {
+        indicator.setSize(rect.size);
+    }
 
     debug.setPosition(rect.position);
     debug.setFillColor(sf::Color(255, 0, 0, 100));

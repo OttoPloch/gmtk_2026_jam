@@ -23,7 +23,7 @@ public:
     UIDial* addUIDial(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, std::vector<sf::IntRect> texCoords, int minValue, int maxValue, float valueScale = 1, sf::Texture* texture = nullptr);
     UISlider* addUISlider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool sizeIsScale, SliderTemplate sliderTemplate, sf::Texture* texture = nullptr);
     UIText* addUIText(std::string ID, sf::FloatRect rect, std::string content, char autoSet = 'h', sf::Color color = sf::Color(60, 255, 60), sf::Font* font = nullptr);
-    UICollider* addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical);
+    UICollider* addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical, bool setHeightManually = false);
 
     UIBackground* getUIBackground(std::string ID);
     UIButton* getUIButton(std::string ID);

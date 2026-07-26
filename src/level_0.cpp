@@ -35,8 +35,8 @@ void Level0::createUI()
 
 
 
-    std::string infoTextContent = "Made with SFML for the\n2026 GMTK Game Jam.\nAttributions are below.\n\n\n";
-    infoTextContent += "Electronics-Flashlight-Plastic-Button-03.wav by DWOBoyle -- https://freesound.org/s/152535/ -- License: Attribution 4.0;\n\nbubble pop 6 by nomentero -- https://freesound.org/s/744144/ -- License: Creative Commons 0;\n\nTicking Timer 20 Sec.wav by LilMati -- https://freesound.org/s/487722/ -- License: Creative Commons 0;\n\nButton Click 1.wav by Mellau -- https://freesound.org/s/506054/ -- License: Attribution NonCommercial 4.0";
+    std::string infoTextContent = "Controls:\n - Click and Drag for most\n   things\n - R to reset\n - F11 to toggle fullscreen\n - Escape to quit\n\nMade with SFML for the\n2026 GMTK Game Jam.\nAttributions are below.\n\n\n";
+    infoTextContent += "Electronics-Flashlight-Plastic-Button-03.wav by DWOBoyle -- https://freesound.org/s/152535/ -- License: Attribution 4.0\n\nbubble pop 6 by nomentero -- https://freesound.org/s/744144/ -- License: Creative Commons 0\n\nTicking Timer 20 Sec.wav by LilMati -- https://freesound.org/s/487722/ -- License: Creative Commons 0\n\nButton Click 1.wav by Mellau -- https://freesound.org/s/506054/ -- License: Attribution NonCommercial 4.0";
 
     int newLineCounter = 0;
     std::vector<int> newLineIndices;
@@ -44,7 +44,7 @@ void Level0::createUI()
     {
         if (infoTextContent[i] == '\n') newLineCounter = 0;
 
-        if (newLineCounter >= 25)
+        if (newLineCounter >= 30)
         {
             newLineIndices.emplace_back(i);
 
@@ -73,7 +73,7 @@ void Level0::createUI()
     uiManager->addToGroup("info", infoButton);
     uiManager->defaultGroup = "info display";
     uiManager->addToGroup("info display",
-    uiManager->addUIBackground("info bg", {infoPos, {130, 200}}, defaultTexCoords.bg, 'r'));
+    uiManager->addUIBackground("info bg", {infoPos, {130, 170}}, defaultTexCoords.bg, 'r'));
     uiManager->addToGroup("info display",
     uiManager->addUIText("info text", {infoPos + sf::Vector2f(15, 15), {98, 0}}, infoTextContent, 'h', sf::Color::White));
 

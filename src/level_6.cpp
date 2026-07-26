@@ -21,7 +21,7 @@ void Level6::createUI()
     engine2Calibration = launchPad->random->getRandInt(-100, 100);
 
     oxidizer = launchPad->random->getRandInt(0, 1);
-    fuel = launchPad->random->getRandInt(0, 1);
+    fuel = false;
     bomb = launchPad->random->getRandInt(0, 1);
     pumps = launchPad->random->getRandInt(0, 1);
 
@@ -232,7 +232,7 @@ void Level6::createUI()
 
     uiManager->addToGroup("notes", notesText);
 
-    notesCollider = uiManager->addUICollider("notes collider", window, {{notesPos.x - 15, static_cast<float>(launchPad->getBackgroundSize().y - 11)}, {230, 10}}, false);
+    notesCollider = uiManager->addUICollider("notes collider", window, {{notesPos.x - 15, static_cast<float>(launchPad->getBackgroundSize().y - 11)}, {230, 40}}, false, true);
 
     notes = uiManager->getGroup("notes");
 

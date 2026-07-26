@@ -116,7 +116,7 @@ void Level3::createUI()
 
     uiManager->addToGroup("notes", notesText);
 
-    notesCollider = uiManager->addUICollider("notes collider", window, {{notesPos.x - 15, static_cast<float>(launchPad->getBackgroundSize().y - 11)}, {230, 10}}, false);
+    notesCollider = uiManager->addUICollider("notes collider", window, {{notesPos.x - 15, static_cast<float>(launchPad->getBackgroundSize().y - 11)}, {230, 40}}, false, true);
 
     notes = uiManager->getGroup("notes");
 

@@ -81,9 +81,9 @@ UIText* UIManager::addUIText(std::string ID, sf::FloatRect rect, std::string con
     return (text[ID] = std::make_unique<UIText>(defaultGroup, this, soundPlayer, rect, font, content, autoSet, color)).get();
 }
 
-UICollider* UIManager::addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical)
+UICollider* UIManager::addUICollider(std::string ID, sf::RenderWindow* window, sf::FloatRect rect, bool vertical, bool setHeightManually)
 {
-    return (colliders[ID] = std::make_unique<UICollider>(defaultGroup, this, soundPlayer, window, rect, vertical)).get();
+    return (colliders[ID] = std::make_unique<UICollider>(defaultGroup, this, soundPlayer, window, rect, vertical, setHeightManually)).get();
 }
 
 UIBackground* UIManager::getUIBackground(std::string ID)
@@ -206,8 +206,8 @@ void UIManager::draw(sf::RenderWindow& window)
 
     for (auto& c : colliders) c.second->draw(window);
 
-    if (*levelIndicator->valueReadInt != 0) levelIndicator->draw(window);
     if (timeIndicator) timeIndicator->draw(window);
+    if (*levelIndicator->valueReadInt != 0) levelIndicator->draw(window);
 }
 
 bool UIManager::isGroupOnTopAtPoint(std::string group, bool useMousePos, sf::Vector2f point)

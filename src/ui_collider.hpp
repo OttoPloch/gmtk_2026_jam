@@ -6,7 +6,7 @@
 class UICollider : public UIElement
 {
 public:
-    UICollider(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::FloatRect rect, bool vertical);
+    UICollider(std::string group, UIManager* uiManager, SoundPlayer* soundPlayer, sf::RenderWindow* window, sf::FloatRect rect, bool vertical, bool setHeightManually = false);
 
     bool onEnter();
 

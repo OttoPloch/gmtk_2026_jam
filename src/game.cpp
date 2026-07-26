@@ -34,7 +34,7 @@ void Game::start()
 
     uiManager.timeIndicator = std::make_unique<UIBackground>("LEVEL", &uiManager, &soundPlayer, &uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
 
-    uiManager.levelIndicator = std::make_unique<UIText>("LEVEL", &uiManager, &soundPlayer, sf::FloatRect({static_cast<float>(launchPad.getBackgroundSize().x) - 25, 5}, {20, 1}), &uiManager.uiTextFont, "9", 'h', sf::Color::White);
+    uiManager.levelIndicator = std::make_unique<UIText>("LEVEL", &uiManager, &soundPlayer, sf::FloatRect({static_cast<sf::Vector2f>(launchPad.getBackgroundSize()) - sf::Vector2f(25, 25)}, {20, 1}), &uiManager.uiTextFont, "9", 'h', sf::Color::White);
     uiManager.levelIndicator->valueReadInt = &currLevel;
 
     run();
@@ -115,22 +115,22 @@ void Game::events()
             {
                 window.toggleFullscreen();
             }
-            else if (keyPressed->code == sf::Keyboard::Key::Right)
-            {
-                if (currLevel < levels.size() - 1)
-                {
-                    currLevel++;
-                    levels[currLevel]->setup();
-                }
-            }
-            else if (keyPressed->code == sf::Keyboard::Key::Left)
-            {
-                if (currLevel > 0)
-                {
-                    currLevel--;
-                    levels[currLevel]->setup();
-                }
-            }
+            // else if (keyPressed->code == sf::Keyboard::Key::Right)
+            // {
+            //     if (currLevel < levels.size() - 1)
+            //     {
+            //         currLevel++;
+            //         levels[currLevel]->setup();
+            //     }
+            // }
+            // else if (keyPressed->code == sf::Keyboard::Key::Left)
+            // {
+            //     if (currLevel > 0)
+            //     {
+            //         currLevel--;
+            //         levels[currLevel]->setup();
+            //     }
+            // }
         }
     }
 }
