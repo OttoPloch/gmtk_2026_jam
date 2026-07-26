@@ -25,6 +25,8 @@ private:
 
     void quit();
 
+    void loadLevels();
+
     Window window;
     LaunchPad launchPad;
     Random random;

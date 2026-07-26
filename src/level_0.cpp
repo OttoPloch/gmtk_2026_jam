@@ -35,7 +35,7 @@ void Level0::createUI()
 
 
 
-    std::string infoTextContent = "Made for the 2026\nGMTK Game Jam.\nAttributions are below.\n\n\n";
+    std::string infoTextContent = "Made with SFML for the\n2026 GMTK Game Jam.\nAttributions are below.\n\n\n";
     infoTextContent += "Electronics-Flashlight-Plastic-Button-03.wav by DWOBoyle -- https://freesound.org/s/152535/ -- License: Attribution 4.0;\n\nbubble pop 6 by nomentero -- https://freesound.org/s/744144/ -- License: Creative Commons 0;\n\nTicking Timer 20 Sec.wav by LilMati -- https://freesound.org/s/487722/ -- License: Creative Commons 0;\n\nButton Click 1.wav by Mellau -- https://freesound.org/s/506054/ -- License: Attribution NonCommercial 4.0";
 
     int newLineCounter = 0;

@@ -216,6 +216,28 @@ void Level6::createUI()
 
     panel4 = uiManager->getGroup("panel4");
 
+
+
+    sf::Vector2f notesPos(50, static_cast<float>(launchPad->getBackgroundSize().y - 106));
+    uiManager->defaultGroup = "notes";
+
+    std::string goal_buttonStates[2] = {"off", "on"};
+    UIText* notesText = uiManager->addUIText("notes text", {notesPos + sf::Vector2f(15, 15), {160, 0}}, "Todo:\n     - set power to between " + std::to_string(static_cast<int>(goal_powerLevel)) + " and " + std::to_string(static_cast<int>(goal_powerLevel + tolerance)) + "%\n     - calibrate engine 1 to between " + std::to_string(static_cast<int>(goal_engine1Calibration)) + " and " + std::to_string(static_cast<int>(goal_engine1Calibration + tolerance)) + "\n     - calibrate engine 2 to between " + std::to_string(static_cast<int>(goal_engine2Calibration)) + " and " + std::to_string(static_cast<int>(goal_engine2Calibration + tolerance)) + "\n     - set oxidizer to " + goal_buttonStates[static_cast<int>(goal_oxidizer)] + "\n     - set fuel to on\n     - set bomb to off\n     - set pumps to " + goal_buttonStates[static_cast<int>(goal_pumps)] + "\n     - set launch angle to between " + std::to_string(static_cast<int>(goal_launchAngle)) + " and " + std::to_string(static_cast<int>(goal_launchAngle + tolerance2)), 'h', sf::Color::White);
+
+    uiManager->addToGroup("notes",
+    uiManager->addUIBackground("notes bg", {notesPos, {200, 80}}, defaultTexCoords.bg, 'b'));
+
+    uiManager->addToGroup("notes",
+    uiManager->addUIBackground("notes text bg", {notesText->getRect().position - sf::Vector2f(3, 3), notesText->getRect().size + sf::Vector2f(6, 6)}, defaultTexCoords.bgText));
+
+    uiManager->addToGroup("notes", notesText);
+
+    notesCollider = uiManager->addUICollider("notes collider", window, {{notesPos.x - 15, static_cast<float>(launchPad->getBackgroundSize().y - 11)}, {230, 10}}, false);
+
+    notes = uiManager->getGroup("notes");
+
+
+
     beginAnimation("hide all", 0);
 }
 
@@ -269,6 +291,11 @@ void Level6::specificUpdate(float dt, float time)
                     {
                         e->changeOffset({0, offset});
                     }
+
+                    for (auto e : *notes)
+                    {
+                        e->changeOffset({0, -offset});
+                    }
                 }
                 else if (currAnim->second <= 2)
                 {
@@ -292,6 +319,11 @@ void Level6::specificUpdate(float dt, float time)
                     for (auto e : *panel4)
                     {
                         e->changeOffset({0, offset});
+                    }
+
+                    for (auto e : *notes)
+                    {
+                        e->changeOffset({0, -offset});
                     }
                 }
                 else
@@ -565,6 +597,72 @@ void Level6::specificUpdate(float dt, float time)
     
                 currAnim->second += dt;
             }
+            else if (currAnim->first == "show notes")
+            {
+                if (currAnim->second <= .001f)
+                {
+                    float offset = 150;
+    
+                    for (auto e : *notes)
+                    {
+                        e->setOffset({0, offset});
+                    }
+                }
+    
+                if (currAnim->second <= .5f)
+                {
+                    float offset = -300 * dt;
+    
+                    for (auto e : *notes)
+                    {
+                        e->changeOffset({0, offset});
+                    }
+                }
+                else
+                {
+                    for (auto e : *notes)
+                    {
+                        e->setOffset({0, 0});
+                    }
+    
+                    animations[10].erase(animations[10].begin());
+                }
+    
+                currAnim->second += dt;
+            }
+            else if (currAnim->first == "hide notes")
+            {
+                if (currAnim->second <= .001f)
+                {
+                    float offset = 0;
+    
+                    for (auto e : *notes)
+                    {
+                        e->setOffset({0, offset});
+                    }
+                }
+    
+                if (currAnim->second <= .5f)
+                {
+                    float offset = 300 * dt;
+    
+                    for (auto e : *notes)
+                    {
+                        e->changeOffset({0, offset});
+                    }
+                }
+                else
+                {
+                    for (auto e : *notes)
+                    {
+                        e->setOffset({0, 150});
+                    }
+    
+                    animations[10].erase(animations[10].begin());
+                }
+    
+                currAnim->second += dt;
+            }
         }
     }
 
@@ -626,6 +724,21 @@ void Level6::specificUpdate(float dt, float time)
                 else
                 {
                     beginAnimation("hide4", 4);
+                }
+            }
+        }
+
+        if (notesCollider && notesCollider->onEnter())
+        {
+            if (animations[10].size() == 0)
+            {
+                if ((*notes)[0]->getOffset() != sf::Vector2f(0, 0))
+                {
+                    beginAnimation("show notes", 10);
+                }
+                else
+                {
+                    beginAnimation("hide notes", 10);
                 }
             }
         }
@@ -699,9 +812,11 @@ void Level6::specificUpdate(float dt, float time)
         panel2Collider = nullptr;
         panel3Collider = nullptr;
         panel4Collider = nullptr;
+        notesCollider = nullptr;
         uiManager->removeUICollider("panel1Collider");
         uiManager->removeUICollider("panel2Collider");
         uiManager->removeUICollider("panel3Collider");
-    uiManager->removeUICollider("panel4Collider");
+        uiManager->removeUICollider("panel4Collider");
+        uiManager->removeUICollider("notes collider");
     }
 }

@@ -59,6 +59,9 @@ private:
     std::vector<UIElement*>* panel4;
     UICollider* panel4Collider;
 
+    std::vector<UIElement*>* notes;
+    UICollider* notesCollider;
+
     float goal_powerLevel;
     float goal_engine1Calibration;
     float goal_engine2Calibration;

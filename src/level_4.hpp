@@ -55,4 +55,7 @@ private:
     
     std::vector<UIElement*>* panel3;
     UICollider* panel3Collider;
+
+    std::vector<UIElement*>* notes;
+    UICollider* notesCollider;
 };

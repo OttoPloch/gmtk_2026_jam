@@ -15,6 +15,7 @@
 #include "level_4.hpp"
 #include "level_5.hpp"
 #include "level_6.hpp"
+#include "level_7.hpp"
 
 Game::Game() {}
 
@@ -28,16 +29,8 @@ void Game::start()
 
     uiManager = UIManager(&window.window, &soundPlayer);
 
-    levels.emplace_back(std::make_unique<Level0>(&window.window, &launchPad, &uiManager, -1));
-    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
-    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 30));
-    levels.emplace_back(std::make_unique<Level3>(&window.window, &launchPad, &uiManager, 25));
-    levels.emplace_back(std::make_unique<Level4>(&window.window, &launchPad, &uiManager, 15));
-    levels.emplace_back(std::make_unique<Level5>(&window.window, &launchPad, &uiManager, 20));
-    levels.emplace_back(std::make_unique<Level6>(&window.window, &launchPad, &uiManager, 30));
     currLevel = 0;
-
-    levels[currLevel]->setup();
+    loadLevels();
 
     uiManager.timeIndicator = std::make_unique<UIBackground>("LEVEL", &uiManager, &soundPlayer, &uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
 
@@ -155,11 +148,11 @@ void Game::update()
             if (currLevel > 0) soundPlayer.play("level finish");
 
             currLevel++;
-            levels[currLevel]->setup();
+            loadLevels();
         }
         else
         {
-            levels[currLevel]->setup();
+            loadLevels();
         }
     }
 
@@ -207,10 +200,31 @@ void Game::draw()
     
     uiManager.draw(window.window);
 
+    if (auto l = dynamic_cast<Level7*>(levels[currLevel].get()))
+    {
+        l->draw();
+    }
+
     window.window.display();
 }
 
 void Game::quit()
 {
     window.window.close();
+}
+
+void Game::loadLevels()
+{
+    levels.clear();
+
+    levels.emplace_back(std::make_unique<Level0>(&window.window, &launchPad, &uiManager, -1));
+    levels.emplace_back(std::make_unique<Level1>(&window.window, &launchPad, &uiManager, -1));
+    levels.emplace_back(std::make_unique<Level2>(&window.window, &launchPad, &uiManager, 30));
+    levels.emplace_back(std::make_unique<Level3>(&window.window, &launchPad, &uiManager, 25));
+    levels.emplace_back(std::make_unique<Level4>(&window.window, &launchPad, &uiManager, 15));
+    levels.emplace_back(std::make_unique<Level5>(&window.window, &launchPad, &uiManager, 20));
+    levels.emplace_back(std::make_unique<Level6>(&window.window, &launchPad, &uiManager, 30));
+    levels.emplace_back(std::make_unique<Level7>(&window.window, &launchPad, &uiManager, 30));
+
+    levels[currLevel]->setup();
 }
