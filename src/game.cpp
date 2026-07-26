@@ -81,10 +81,14 @@ void Game::events()
         if (event->is<sf::Event::FocusLost>())
         {
             gameClock.stop();
+
+            soundPlayer.pauseAll();
         }
         if (event->is<sf::Event::FocusGained>())
         {
             gameClock.start();
+
+            soundPlayer.playAll();
         }
 
         if (!gameClock.isRunning()) continue;

@@ -13,6 +13,10 @@ public:
 
     void stopAll();
 
+    void pauseAll();
+
+    void playAll();
+
     void update();
 
     std::unique_ptr<sf::Sound> tickPlayer;

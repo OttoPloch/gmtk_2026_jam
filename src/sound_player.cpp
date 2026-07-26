@@ -46,6 +46,20 @@ void SoundPlayer::stopAll()
     if (tickPlayer) tickPlayer->stop();
 }
 
+void SoundPlayer::pauseAll()
+{
+    for (auto& p : players) p.second->pause();
+
+    if (tickPlayer) tickPlayer->pause();
+}
+
+void SoundPlayer::playAll()
+{
+    for (auto& p : players) p.second->play();
+
+    if (tickPlayer && tickPlayer->getStatus() == sf::Sound::Status::Paused) tickPlayer->play();
+}
+
 void SoundPlayer::update()
 {
     std::vector<int> playersToRemove;
