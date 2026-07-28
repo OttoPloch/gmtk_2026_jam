@@ -651,7 +651,7 @@ void Level5::specificUpdate(float dt, float time)
         }
     }
 
-    if (animations[0].size() == 0)
+    if (animations[0].size() == 0 && !sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
     {
         if (panel1Collider && panel1Collider->onEnter())
         {

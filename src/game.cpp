@@ -29,7 +29,7 @@ void Game::start()
 
     uiManager = UIManager(&window.window, &soundPlayer);
 
-    currLevel = 0;
+    currLevel = 2;
     loadLevels();
 
     uiManager.timeIndicator = std::make_unique<UIBackground>("LEVEL", &uiManager, &soundPlayer, &uiManager.uiBackgroundTexture, sf::FloatRect({-1, static_cast<float>(launchPad.getBackgroundSize().y) - 6}, {static_cast<float>(launchPad.getBackgroundSize().x) + 1, 6}), defaultTexCoords.bgBar);
